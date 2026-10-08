@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Link, useParams } from "react-router-dom";
 import { supabase } from "../lib/supabase";
-import { HelpCircle, Plus, Trash2, Edit3, ArrowRight, Loader2, AlertCircle, X, Upload, Image as ImageIcon } from "lucide-react";
+import { HelpCircle, Plus, Trash2, Edit3, ArrowRight, Loader2, AlertCircle, X, Image as ImageIcon } from "lucide-react";
 
 type LectureQuestion = {
   id: string;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
-import { Bell, Calendar, Clock, Loader2, AlertCircle, Image as ImageIcon, ExternalLink, X, ShieldAlert, FileText, CheckCircle, Megaphone } from "lucide-react";
+import { Bell, Calendar, Clock, Loader2, AlertCircle, Image as  ExternalLink, X, ShieldAlert, FileText, CheckCircle, Megaphone } from "lucide-react";
 import { motion } from "motion/react";
 
 type AnnouncementItem = {
