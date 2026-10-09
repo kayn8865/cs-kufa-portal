@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, Navigate, Outlet, useNavigate, useLocation, useParams } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, Navigate, Outlet, useNavigate, useLocation, useParams } from "react-router-dom";
 import { supabase } from "./lib/supabase";
 import type { Session } from "@supabase/supabase-js";
 import { Loader2 } from "lucide-react";
@@ -163,7 +163,7 @@ export default function App() {
   }
 
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
         {/* صفحة تسجيل الدخول */}
         <Route path="/login" element={<LoginPage />} />
@@ -184,7 +184,7 @@ export default function App() {
         <Route path="/admin/entertainment" element={session ? <EntertainmentManagement /> : <Navigate to="/login" replace />} />
         <Route path="/admin/featured" element={session ? <FeaturedManagement /> : <Navigate to="/login" replace />} />
 
-        {/* مسارات بوابة الطلاب والموقع العام (مفتوحة بالكامل مباشرة بدون تسجيل دخول وتجلب البيانات بصورة طبيعية) */}
+        {/* مسارات بوابة الطلاب والموقع العام */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<HomePageWrapper />} />
           <Route path="/subjects" element={<SubjectsPageWrapper />} />
@@ -205,6 +205,6 @@ export default function App() {
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
