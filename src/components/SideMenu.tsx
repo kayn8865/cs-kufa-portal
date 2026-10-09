@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { 
   Home, 
@@ -32,6 +33,7 @@ type SideMenuProps = {
 
 export default function SideMenu({ open, page, onClose, onNavigate }: SideMenuProps) {
   const [isAdmin, setIsAdmin] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function checkAdminRole() {
@@ -94,7 +96,8 @@ export default function SideMenu({ open, page, onClose, onNavigate }: SideMenuPr
             <div className="mb-4 pb-4 border-b border-slate-100 dark:border-slate-800">
               <button
                 onClick={() => {
-                  window.location.href = "/admin";
+                  onClose();
+                  navigate("/admin");
                 }}
                 className="group flex w-full items-center justify-between rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 p-4 text-white shadow-lg shadow-indigo-600/30 transition-all hover:scale-[1.02] cursor-pointer"
               >
