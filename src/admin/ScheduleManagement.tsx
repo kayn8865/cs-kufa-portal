@@ -128,10 +128,6 @@ export default function ScheduleManagement() {
     }
   };
 
-  const getDayName = (val: number) => {
-    return daysMap.find(d => d.value === val)?.label || "غير محدد";
-  };
-
   // تجميع المواد حسب أيام الأسبوع
   const groupedSchedule = daysMap.map(day => {
     const items = schedule.filter(item => item.day_of_week === day.value);
@@ -171,7 +167,6 @@ export default function ScheduleManagement() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {groupedSchedule.map((group) => (
               <div key={group.value} className="flex flex-col rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900 overflow-hidden">
-                {/* رأس البطاقة (اسم اليوم) */}
                 <div className="flex items-center gap-3 bg-slate-100 dark:bg-slate-800/60 px-6 py-4 border-b border-slate-200 dark:border-slate-800">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-600 font-bold text-white text-sm shadow-md shadow-indigo-600/20">
                     {group.label.charAt(0)}
@@ -182,7 +177,6 @@ export default function ScheduleManagement() {
                   </div>
                 </div>
 
-                {/* قائمة المحاضرات الخاصة بهذا اليوم */}
                 <div className="p-4 space-y-3 flex-1">
                   {group.items.map((item) => (
                     <div key={item.id} className="flex items-center justify-between rounded-2xl border border-slate-100 bg-slate-50 p-4 dark:border-slate-800/60 dark:bg-slate-950/50 hover:border-slate-200 dark:hover:border-slate-700 transition-all">
