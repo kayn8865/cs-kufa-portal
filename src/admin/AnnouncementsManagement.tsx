@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabase";
-import { Plus, Trash2, ArrowRight, Loader2, AlertCircle, X, Image as ImageIcon, Calendar, Clock, BookOpen, CheckSquare, ShieldAlert, Megaphone } from "lucide-react";
+import { Plus, Trash2, ArrowRight, Loader2, AlertCircle, X, Image as ImageIcon, Calendar, Clock, BookOpen, CheckSquare, ShieldAlert, Megaphone, Edit3 } from "lucide-react";
 
 type Announcement = {
   id: string;
@@ -32,6 +32,18 @@ export default function AnnouncementsManagement() {
   
   const [submitting, setSubmitting] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(false);
+
+  // Modal تعديل إعلان/تبليغ
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<Announcement | null>(null);
+  const [editType, setEditType] = useState<"exam" | "assignment" | "management" | "announcement">("announcement");
+  const [editTitle, setEditTitle] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [editImageFile, setEditImageFile] = useState<File | null>(null);
+  const [editExamDate, setEditExamDate] = useState("");
+  const [editExamTime, setEditExamTime] = useState("");
+  const [editDueDate, setEditDueDate] = useState("");
+  const [editingSubmitting, setEditingSubmitting] = useState(false);
 
   // معاينة الصور الكبيرة
   const [previewImage, setPreviewImage] = useState<string | null>(null);
@@ -113,10 +125,9 @@ export default function AnnouncementsManagement() {
 
     try {
       if (type === "exam") {
-        // التحقق من صيغة الوقت لكي تتوافق تماماً مع متطلبات قاعدة البيانات (type time)
         let formattedTime = examTime.trim();
         if (formattedTime.length === 5) {
-          formattedTime += ":00"; // تحويل 14:00 إلى 14:00:00
+          formattedTime += ":00";
         }
 
         const { data: subjectsList } = await supabase.from("subjects").select("id").limit(1);
@@ -168,6 +179,79 @@ export default function AnnouncementsManagement() {
     } finally {
       setSubmitting(false);
       setUploadingFile(false);
+    }
+  };
+
+  const initiateEdit = (item: Announcement) => {
+    setEditingItem(item);
+    setEditType(item.type);
+    setEditTitle(item.title);
+    setEditDescription(item.description || "");
+    setEditImageFile(null);
+    setEditExamDate(item.exam_date || "");
+    setEditExamTime(item.exam_time || "");
+    setEditDueDate(item.due_date || "");
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditAnnouncement = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!editingItem) return;
+    setEditingSubmitting(true);
+
+    try {
+      if (editingItem.type === "exam" || editType === "exam") {
+        let formattedTime = editExamTime.trim();
+        if (formattedTime.length === 5) {
+          formattedTime += ":00";
+        }
+
+        const examRecord = {
+          exam_type: editTitle || "رسمي",
+          exam_date: editExamDate,
+          start_time: formattedTime || "09:00:00",
+          location: editDescription || "قاعة الامتحان",
+          notes: editDescription || null
+        };
+
+        const { error: examUpdateError } = await supabase
+          .from("exams")
+          .update(examRecord)
+          .eq("id", editingItem.id);
+
+        if (examUpdateError) throw examUpdateError;
+        alert("تم تحديث الامتحان بنجاح!");
+      } else {
+        let imgPath = editingItem.image_url;
+        if (editImageFile) {
+          const uploadedPath = await uploadImageToStorage(editImageFile);
+          if (uploadedPath) imgPath = uploadedPath;
+        }
+
+        const updatedRecord: any = {
+          type: editType,
+          title: editTitle,
+          description: editDescription.trim() ? editDescription.trim() : null,
+          image_url: imgPath,
+          due_date: editType === "assignment" && editDueDate ? editDueDate : null,
+        };
+
+        const { error: updateError } = await supabase
+          .from("announcements")
+          .update(updatedRecord)
+          .eq("id", editingItem.id);
+
+        if (updateError) throw updateError;
+        alert("تم تحديث التبليغ بنجاح!");
+      }
+
+      setIsEditModalOpen(false);
+      setEditingItem(null);
+      fetchAnnouncements();
+    } catch (err: any) {
+      alert("خطأ أثناء التعديل: " + err.message);
+    } finally {
+      setEditingSubmitting(false);
     }
   };
 
@@ -266,7 +350,7 @@ export default function AnnouncementsManagement() {
                 {generalAnnouncements.length === 0 ? (
                   <p className="text-center text-xs text-slate-500 py-8">لا توجد إعلانات عامة</p>
                 ) : (
-                  generalAnnouncements.map((item) => renderAnnouncementCard(item, getPublicImageUrl, initiateDelete, setPreviewImage))
+                  generalAnnouncements.map((item) => renderAnnouncementCard(item, getPublicImageUrl, initiateEdit, initiateDelete, setPreviewImage))
                 )}
               </div>
             </div>
@@ -286,7 +370,7 @@ export default function AnnouncementsManagement() {
                 {managementAnnouncements.length === 0 ? (
                   <p className="text-center text-xs text-slate-500 py-8">لا توجد تبليغات إدارية</p>
                 ) : (
-                  managementAnnouncements.map((item) => renderAnnouncementCard(item, getPublicImageUrl, initiateDelete, setPreviewImage))
+                  managementAnnouncements.map((item) => renderAnnouncementCard(item, getPublicImageUrl, initiateEdit, initiateDelete, setPreviewImage))
                 )}
               </div>
             </div>
@@ -306,7 +390,7 @@ export default function AnnouncementsManagement() {
                 {assignmentAnnouncements.length === 0 ? (
                   <p className="text-center text-xs text-slate-500 py-8">لا توجد تبليغات واجبات</p>
                 ) : (
-                  assignmentAnnouncements.map((item) => renderAnnouncementCard(item, getPublicImageUrl, initiateDelete, setPreviewImage))
+                  assignmentAnnouncements.map((item) => renderAnnouncementCard(item, getPublicImageUrl, initiateEdit, initiateDelete, setPreviewImage))
                 )}
               </div>
             </div>
@@ -326,7 +410,7 @@ export default function AnnouncementsManagement() {
                 {examAnnouncements.length === 0 ? (
                   <p className="text-center text-xs text-slate-500 py-8">لا توجد تبليغات امتحانات</p>
                 ) : (
-                  examAnnouncements.map((item) => renderAnnouncementCard(item, getPublicImageUrl, initiateDelete, setPreviewImage))
+                  examAnnouncements.map((item) => renderAnnouncementCard(item, getPublicImageUrl, initiateEdit, initiateDelete, setPreviewImage))
                 )}
               </div>
             </div>
@@ -445,6 +529,111 @@ export default function AnnouncementsManagement() {
           </div>
         )}
 
+        {isEditModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
+            <div className="w-full max-w-lg rounded-3xl border border-slate-800 bg-[#111827] p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+              <div className="mb-6 flex items-center justify-between">
+                <h3 className="text-xl font-bold text-white">تعديل معلومات الإعلان / التبليغ</h3>
+                <button onClick={() => setIsEditModalOpen(false)} className="rounded-xl p-2 text-slate-400 hover:bg-slate-800 cursor-pointer"><X size={20} /></button>
+              </div>
+
+              <form onSubmit={handleEditAnnouncement} className="space-y-4">
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-slate-300">نوع التبليغ / الإعلان</label>
+                  <select 
+                    value={editType} 
+                    onChange={(e: any) => setEditType(e.target.value)}
+                    className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-3.5 text-white outline-none focus:border-indigo-500"
+                  >
+                    <option value="announcement">📢 إعلان عام</option>
+                    <option value="exam">📝 تبليغ امتحان</option>
+                    <option value="assignment">📋 تبليغ واجب</option>
+                    <option value="management">🏛️ تبليغ إدارة</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-slate-300">العنوان</label>
+                  <input 
+                    type="text" 
+                    required 
+                    value={editTitle} 
+                    onChange={(e) => setEditTitle(e.target.value)} 
+                    className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-3.5 text-white outline-none focus:border-indigo-500" 
+                  />
+                </div>
+
+                {editType === "exam" && (
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="mb-2 block text-xs font-medium text-slate-300">تاريخ الامتحان</label>
+                      <input 
+                        type="date" 
+                        required 
+                        value={editExamDate} 
+                        onChange={(e) => setEditExamDate(e.target.value)} 
+                        className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-3 text-white outline-none focus:border-indigo-500 text-xs" 
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-2 block text-xs font-medium text-slate-300">وقت البدء</label>
+                      <input 
+                        type="time" 
+                        required 
+                        value={editExamTime} 
+                        onChange={(e) => setEditExamTime(e.target.value)} 
+                        className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-3 text-white outline-none focus:border-indigo-500 text-xs" 
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {editType === "assignment" && (
+                  <div>
+                    <label className="mb-2 block text-xs font-medium text-slate-300">موعد التسليم النهائي</label>
+                    <input 
+                      type="date" 
+                      required 
+                      value={editDueDate} 
+                      onChange={(e) => setEditDueDate(e.target.value)} 
+                      className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-3.5 text-white outline-none focus:border-indigo-500 text-xs" 
+                    />
+                  </div>
+                )}
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-slate-300">الوصف أو التفاصيل</label>
+                  <textarea 
+                    rows={3} 
+                    value={editDescription} 
+                    onChange={(e) => setEditDescription(e.target.value)} 
+                    className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-3.5 text-white outline-none focus:border-indigo-500" 
+                  />
+                </div>
+
+                {editType !== "exam" && (
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-slate-300">تغيير الصورة (اختياري)</label>
+                    <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-700 bg-slate-900 p-4 hover:border-indigo-500">
+                      <ImageIcon size={20} className="text-indigo-400" />
+                      <span className="text-sm font-medium text-slate-300">{editImageFile ? editImageFile.name : "اختر صورة جديدة أو اتركه كما هو"}</span>
+                      <input type="file" accept="image/*" onChange={(e) => setEditImageFile(e.target.files?.[0] || null)} className="hidden" />
+                    </label>
+                  </div>
+                )}
+
+                <div className="mt-6 flex justify-end gap-3">
+                  <button type="button" onClick={() => setIsEditModalOpen(false)} className="rounded-2xl border border-slate-800 px-6 py-3 text-sm font-bold text-slate-300 hover:bg-slate-800 cursor-pointer">إلغاء</button>
+                  <button type="submit" disabled={editingSubmitting} className="flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 disabled:opacity-50 cursor-pointer">
+                    {editingSubmitting && <Loader2 size={18} className="animate-spin" />}
+                    <span>حفظ التعديلات</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
         {previewImage && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 p-4 backdrop-blur-md" onClick={() => setPreviewImage(null)}>
             <div className="relative max-w-4xl max-h-[90vh]">
@@ -520,6 +709,7 @@ export default function AnnouncementsManagement() {
 function renderAnnouncementCard(
   item: Announcement, 
   getPublicImageUrl: (path: string | null) => string, 
+  initiateEdit: (item: Announcement) => void,
   initiateDelete: (item: Announcement) => void, 
   setPreviewImage: (url: string) => void
 ) {
@@ -530,9 +720,14 @@ function renderAnnouncementCard(
       <div>
         <div className="flex items-center justify-between mb-2">
           <h4 className="font-bold text-white text-sm line-clamp-1">{item.title}</h4>
-          <button onClick={() => initiateDelete(item)} className="flex h-7 w-7 items-center justify-center rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors shrink-0 cursor-pointer" title="حذف">
-            <Trash2 size={13} />
-          </button>
+          <div className="flex items-center gap-1.5 shrink-0">
+            <button onClick={() => initiateEdit(item)} className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 transition-colors cursor-pointer" title="تعديل">
+              <Edit3 size={13} />
+            </button>
+            <button onClick={() => initiateDelete(item)} className="flex h-7 w-7 items-center justify-center rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors cursor-pointer" title="حذف">
+              <Trash2 size={13} />
+            </button>
+          </div>
         </div>
 
         {item.description && (

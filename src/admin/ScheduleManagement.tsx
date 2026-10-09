@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabase";
-import { Calendar, Plus, Edit3, Trash2, ArrowRight, Loader2, AlertCircle, X } from "lucide-react";
+import { Calendar, Plus, Edit3, Trash2, ArrowRight, Loader2, AlertCircle, X, Clock, MapPin } from "lucide-react";
 
 type ScheduleItem = {
   id: string;
@@ -46,7 +46,7 @@ export default function ScheduleManagement() {
     try {
       setLoading(true);
       const [schRes, subRes] = await Promise.all([
-        supabase.from("schedule").select("*, subjects(name)").order("day_of_week"),
+        supabase.from("schedule").select("*, subjects(name)").order("day_of_week").order("start_time"),
         supabase.from("subjects").select("id, name")
       ]);
 
@@ -132,6 +132,12 @@ export default function ScheduleManagement() {
     return daysMap.find(d => d.value === val)?.label || "غير محدد";
   };
 
+  // تجميع المواد حسب أيام الأسبوع
+  const groupedSchedule = daysMap.map(day => {
+    const items = schedule.filter(item => item.day_of_week === day.value);
+    return { ...day, items };
+  }).filter(group => group.items.length > 0);
+
   return (
     <div dir="rtl" className="min-h-screen bg-slate-50 p-4 sm:p-6 lg:p-8 dark:bg-slate-950">
       <div className="mx-auto max-w-7xl">
@@ -142,11 +148,11 @@ export default function ScheduleManagement() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold text-slate-900 dark:text-white">إدارة الجدول الأسبوعي</h1>
-              <p className="text-sm text-slate-500 dark:text-slate-400">تحديث مواعيد المحاضرات والجدول الدراسي</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">تحديث مواعيد المحاضرات والجدول الدراسي مرتبة حسب الأيام</p>
             </div>
           </div>
 
-          <button onClick={openAddModal} className="flex items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-600/20 hover:bg-indigo-700">
+          <button onClick={openAddModal} className="flex items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-600/20 hover:bg-indigo-700 cursor-pointer">
             <Plus size={20} />
             <span>إضافة موعد جديد</span>
           </button>
@@ -156,28 +162,52 @@ export default function ScheduleManagement() {
           <div className="flex h-64 items-center justify-center"><Loader2 size={36} className="animate-spin text-indigo-600 dark:text-indigo-400" /></div>
         ) : error ? (
           <div className="rounded-3xl border border-red-200 bg-red-50 p-8 text-center text-red-600 dark:border-red-500/20 dark:bg-red-500/10"><AlertCircle size={36} className="mx-auto mb-2" /><p>{error}</p></div>
-        ) : schedule.length === 0 ? (
+        ) : groupedSchedule.length === 0 ? (
           <div className="rounded-3xl border border-slate-200 bg-white p-12 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
             <Calendar size={48} className="mx-auto mb-4 text-slate-300 dark:text-slate-600" />
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">لا توجد مواعيد في الجدول</h3>
           </div>
         ) : (
-          <div className="space-y-4">
-            {schedule.map((item) => (
-              <div key={item.id} className="flex flex-col gap-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between dark:border-slate-800 dark:bg-slate-900">
-                <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-indigo-50 font-bold text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400">
-                    {getDayName(item.day_of_week).charAt(0)}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {groupedSchedule.map((group) => (
+              <div key={group.value} className="flex flex-col rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900 overflow-hidden">
+                {/* رأس البطاقة (اسم اليوم) */}
+                <div className="flex items-center gap-3 bg-slate-100 dark:bg-slate-800/60 px-6 py-4 border-b border-slate-200 dark:border-slate-800">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-600 font-bold text-white text-sm shadow-md shadow-indigo-600/20">
+                    {group.label.charAt(0)}
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">{item.subjects?.name || "مادة دراسية"}</h3>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">يوم {getDayName(item.day_of_week)} | {item.start_time} - {item.end_time || ""} {item.location ? `| ${item.location}` : ""}</p>
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white">{group.label}</h3>
+                    <span className="text-xs text-slate-500 dark:text-slate-400">{group.items.length} محاضرات</span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3">
-                  <button onClick={() => openEditModal(item)} className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300"><Edit3 size={18} /></button>
-                  <button onClick={() => handleDelete(item.id)} className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-500/10 dark:text-red-400"><Trash2 size={18} /></button>
+                {/* قائمة المحاضرات الخاصة بهذا اليوم */}
+                <div className="p-4 space-y-3 flex-1">
+                  {group.items.map((item) => (
+                    <div key={item.id} className="flex items-center justify-between rounded-2xl border border-slate-100 bg-slate-50 p-4 dark:border-slate-800/60 dark:bg-slate-950/50 hover:border-slate-200 dark:hover:border-slate-700 transition-all">
+                      <div className="space-y-1">
+                        <h4 className="font-bold text-slate-900 dark:text-white text-sm">{item.subjects?.name || "مادة دراسية"}</h4>
+                        <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
+                          <span className="flex items-center gap-1">
+                            <Clock size={12} className="text-indigo-500" />
+                            {item.start_time} {item.end_time ? `- ${item.end_time}` : ""}
+                          </span>
+                          {item.location && (
+                            <span className="flex items-center gap-1">
+                              <MapPin size={12} className="text-rose-500" />
+                              {item.location}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <button onClick={() => openEditModal(item)} className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-200/60 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 cursor-pointer" title="تعديل"><Edit3 size={14} /></button>
+                        <button onClick={() => handleDelete(item.id)} className="flex h-8 w-8 items-center justify-center rounded-xl bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-500/10 dark:text-red-400 dark:hover:bg-red-500/20 cursor-pointer" title="حذف"><Trash2 size={14} /></button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}
@@ -189,7 +219,7 @@ export default function ScheduleManagement() {
             <div className="w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl dark:bg-slate-900">
               <div className="mb-6 flex items-center justify-between">
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white">{editingItem ? "تعديل الموعد" : "إضافة موعد جديد"}</h3>
-                <button onClick={() => setIsModalOpen(false)} className="rounded-xl p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"><X size={20} /></button>
+                <button onClick={() => setIsModalOpen(false)} className="rounded-xl p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"><X size={20} /></button>
               </div>
               <form onSubmit={handleSave} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
@@ -225,8 +255,8 @@ export default function ScheduleManagement() {
                 </div>
 
                 <div className="mt-6 flex justify-end gap-3">
-                  <button type="button" onClick={() => setIsModalOpen(false)} className="rounded-2xl border border-slate-200 px-6 py-3 text-sm font-bold text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800">إلغاء</button>
-                  <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 disabled:opacity-50">
+                  <button type="button" onClick={() => setIsModalOpen(false)} className="rounded-2xl border border-slate-200 px-6 py-3 text-sm font-bold text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800 cursor-pointer">إلغاء</button>
+                  <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 disabled:opacity-50 cursor-pointer">
                     {submitting && <Loader2 size={18} className="animate-spin" />}
                     <span>حفظ</span>
                   </button>
