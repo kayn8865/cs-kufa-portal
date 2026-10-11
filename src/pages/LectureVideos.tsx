@@ -100,19 +100,19 @@ export default function LectureVideosPage() {
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-slate-950">
-        <Loader2 size={40} className="animate-spin text-indigo-400" />
+      <div className="flex h-screen items-center justify-center bg-slate-50 dark:bg-slate-950">
+        <Loader2 size={40} className="animate-spin text-indigo-600 dark:text-indigo-400" />
       </div>
     );
   }
 
   if (error && !lecture) {
     return (
-      <div className="min-h-screen bg-slate-950 p-6 text-white" dir="rtl">
-        <div className="mx-auto max-w-xl rounded-3xl border border-red-500/20 bg-red-500/10 p-8 text-center text-red-400">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 p-6 text-slate-900 dark:text-white" dir="rtl">
+        <div className="mx-auto max-w-xl rounded-3xl border border-red-500/20 bg-red-500/10 p-8 text-center text-red-600 dark:text-red-400">
           <AlertCircle size={40} className="mx-auto mb-2" />
           <p>{error}</p>
-          <button onClick={() => navigate(-1)} className="mt-4 inline-block rounded-xl bg-slate-800 px-6 py-2 text-white cursor-pointer">
+          <button onClick={() => navigate(-1)} className="mt-4 inline-block rounded-xl bg-slate-200 dark:bg-slate-800 px-6 py-2 text-slate-900 dark:text-white cursor-pointer shadow-sm">
             العودة للخلف
           </button>
         </div>
@@ -126,27 +126,27 @@ export default function LectureVideosPage() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -15 }}
       dir="rtl"
-      className="space-y-8 bg-slate-950 text-white min-h-screen p-4 sm:p-8 max-w-6xl mx-auto"
+      className="space-y-8 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white min-h-screen p-4 sm:p-8 max-w-6xl mx-auto transition-colors duration-300"
     >
       {/* زر العودة */}
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-2 text-xs font-bold text-indigo-400 hover:text-indigo-300 transition-colors w-fit cursor-pointer bg-slate-900 border border-slate-800 px-4 py-2 rounded-xl shadow-md"
+        className="flex items-center gap-2 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors w-fit cursor-pointer bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2 rounded-xl shadow-sm dark:shadow-md"
       >
         <ArrowRight size={16} />
         <span>العودة إلى تفاصيل المحاضرة</span>
       </button>
 
       {/* رأس الصفحة مع أيقونة فيديو بارزة */}
-      <div className="flex items-center gap-5 rounded-3xl border border-slate-800 bg-[#111827] p-6 sm:p-8 shadow-xl">
-        <div className="flex h-18 w-18 sm:h-20 sm:w-20 shrink-0 items-center justify-center rounded-3xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 shadow-inner">
+      <div className="flex items-center gap-5 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 sm:p-8 shadow-sm dark:shadow-xl transition-colors duration-300">
+        <div className="flex h-18 w-18 sm:h-20 sm:w-20 shrink-0 items-center justify-center rounded-3xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 shadow-inner">
           <Video size={40} />
         </div>
         <div>
-          <span className="text-xs font-bold text-indigo-400 flex items-center gap-1.5 uppercase tracking-wider">
+          <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5 uppercase tracking-wider">
             <BookOpen size={16} /> فيديوهات الشرح الخاصة بالمحاضرة
           </span>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white mt-1">{lecture?.title || "فيديوهات المحاضرة"}</h1>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">{lecture?.title || "فيديوهات المحاضرة"}</h1>
         </div>
       </div>
 
@@ -158,35 +158,35 @@ export default function LectureVideosPage() {
             return (
               <div 
                 key={vid.id}
-                className="group flex flex-col justify-between rounded-3xl border border-slate-800 bg-[#111827] p-5 shadow-lg hover:border-indigo-500/50 transition-all"
+                className="group flex flex-col justify-between rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-5 shadow-sm dark:shadow-lg hover:border-indigo-500/50 transition-all"
               >
                 <div>
                   {/* عرض الصورة المصغرة الكبيرة للفيديو مع زر التشغيل */}
                   <div 
                     onClick={() => setActiveVideoPlayer(vid)}
-                    className="relative mb-4 aspect-video w-full cursor-pointer overflow-hidden rounded-2xl bg-slate-900 border border-slate-800"
+                    className="relative mb-4 aspect-video w-full cursor-pointer overflow-hidden rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800"
                   >
                     {thumbnailUrl ? (
                       <img src={thumbnailUrl} alt={vid.title} className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300" />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center text-slate-600">
+                      <div className="flex h-full w-full items-center justify-center text-slate-400 dark:text-slate-600">
                         <Video size={36} />
                       </div>
                     )}
-                    <div className="absolute inset-0 bg-slate-950/40 flex items-center justify-center group-hover:bg-slate-950/20 transition-colors">
+                    <div className="absolute inset-0 bg-slate-950/30 flex items-center justify-center group-hover:bg-slate-950/15 transition-colors">
                       <div className="flex h-14 w-14 items-center justify-center rounded-full bg-indigo-600 text-white shadow-lg group-hover:scale-110 transition-transform">
                         <Play size={26} className="fill-white ml-0.5" />
                       </div>
                     </div>
                   </div>
 
-                  <h3 className="text-lg font-bold text-white mb-1">{vid.title}</h3>
-                  <p className="text-xs text-slate-400 mb-4 line-clamp-2">{vid.description || "لا يوجد وصف لهذا الفيديو."}</p>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">{vid.title}</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mb-4 line-clamp-2">{vid.description || "لا يوجد وصف لهذا الفيديو."}</p>
                 </div>
 
                 <button 
                   onClick={() => setActiveVideoPlayer(vid)}
-                  className="w-full flex items-center justify-center gap-2 rounded-2xl bg-indigo-600/20 py-3 text-xs font-bold text-indigo-400 border border-indigo-500/30 hover:bg-indigo-600 hover:text-white transition-all cursor-pointer"
+                  className="w-full flex items-center justify-center gap-2 rounded-2xl bg-indigo-50 dark:bg-indigo-600/20 py-3 text-xs font-bold text-indigo-600 dark:text-indigo-400 border border-indigo-500/30 hover:bg-indigo-600 hover:text-white transition-all cursor-pointer"
                 >
                   <Play size={15} className="fill-current" />
                   <span>تشغيل الفيديو داخل المنصة</span>
@@ -196,34 +196,34 @@ export default function LectureVideosPage() {
           })}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center rounded-3xl border border-slate-800 bg-[#111827] p-16 text-center shadow-xl">
-          <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 shadow-inner">
+        <div className="flex flex-col items-center justify-center rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-16 text-center shadow-sm dark:shadow-xl">
+          <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 shadow-inner">
             <Play size={36} />
           </div>
-          <h3 className="text-xl font-bold text-white">لا توجد فيديوهات مضافة لهذه المحاضرة حالياً</h3>
-          <p className="text-sm text-slate-400 mt-1 max-w-sm">سيتم إضافة فيديوهات الشرح من قبل إدارة المواد قريباً.</p>
+          <h3 className="text-xl font-bold text-slate-900 dark:text-white">لا توجد فيديوهات مضافة لهذه المحاضرة حالياً</h3>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-sm">سيتم إضافة فيديوهات الشرح من قبل إدارة المواد قريباً.</p>
         </div>
       )}
 
       {/* نافذة مشغل الفيديو السينمائي الداخلي (Modal) مع دعم ملء الشاشة الكامل */}
       {activeVideoPlayer && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-4 backdrop-blur-md">
-          <div className="w-full max-w-4xl rounded-3xl border border-slate-800 bg-[#111827] p-6 shadow-2xl">
+          <div className="w-full max-w-4xl rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 shadow-2xl">
             <div className="mb-4 flex items-center justify-between">
               <div>
-                <h3 className="text-xl font-bold text-white">{activeVideoPlayer.title}</h3>
-                <p className="text-xs text-slate-400 mt-0.5">{activeVideoPlayer.description}</p>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white">{activeVideoPlayer.title}</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{activeVideoPlayer.description}</p>
               </div>
               <button 
                 onClick={() => setActiveVideoPlayer(null)} 
-                className="rounded-xl p-2 text-slate-400 hover:bg-slate-800 cursor-pointer"
+                className="rounded-xl p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
               >
                 <X size={22} />
               </button>
             </div>
 
             {/* مشغل الـ Iframe المدمج مع الصلاحيات الكاملة لملء الشاشة */}
-            <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-black border border-slate-800 shadow-inner">
+            <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-black border border-slate-200 dark:border-slate-800 shadow-inner">
               <iframe
                 src={getYouTubeEmbedUrl(activeVideoPlayer.youtube_url)}
                 title={activeVideoPlayer.title}
@@ -238,14 +238,14 @@ export default function LectureVideosPage() {
                 href={activeVideoPlayer.youtube_url} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-xs font-bold text-indigo-400 hover:underline"
+                className="flex items-center gap-1.5 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline"
               >
                 <ExternalLink size={14} />
                 <span>فتح الفيديو مباشرة في يوتيوب</span>
               </a>
               <button 
                 onClick={() => setActiveVideoPlayer(null)}
-                className="rounded-2xl bg-slate-800 px-6 py-2.5 text-sm font-bold text-white hover:bg-slate-700 cursor-pointer"
+                className="rounded-2xl bg-slate-200 dark:bg-slate-800 px-6 py-2.5 text-sm font-bold text-slate-900 dark:text-white hover:bg-slate-300 dark:hover:bg-slate-700 cursor-pointer"
               >
                 إغلاق المشغل
               </button>

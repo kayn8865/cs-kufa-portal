@@ -11,6 +11,8 @@ type EntertainmentItem = {
   type: "Video" | "Website" | "Program" | "Article";
   image_url: string;
   url: string;
+  is_active?: boolean;
+  display_order?: number;
 };
 
 export default function EntertainmentPage() {
@@ -23,19 +25,32 @@ export default function EntertainmentPage() {
       setLoading(true);
       setError(null);
 
-      const { data, error } = await supabase
-        .from("entertainment_items")
-        .select("*")
-        .eq("is_active", true)
-        .order("display_order", { ascending: true });
+      try {
+        // الاستعلام من جدول entertainment الصحيح في سوبابيز
+        const { data, error } = await supabase
+          .from("entertainment")
+          .select("*");
 
-      if (error) {
-        console.error("Error fetching entertainment:", error);
-        setError("حدث خطأ أثناء جلب المحتوى. يرجى المحاولة لاحقاً.");
-      } else {
-        setItems(data || []);
+        if (error) {
+          console.error("Error fetching entertainment:", error);
+          setError("حدث خطأ أثناء جلب المحتوى. يرجى المحاولة لاحقاً.");
+        } else {
+          // الفلترة لضمان ظهور العناصر حتى لو لم يكن حقل is_active محدداً
+          const activeItems = (data || []).filter(
+            (item) => item.is_active === true || item.is_active === undefined || item.is_active === null
+          );
+
+          // ترتيب العناصر حسب display_order
+          activeItems.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
+
+          setItems(activeItems);
+        }
+      } catch (err: any) {
+        console.error("Unexpected error:", err);
+        setError("حدث خطأ غير متوقع أثناء جلب البيانات.");
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
 
     fetchEntertainment();

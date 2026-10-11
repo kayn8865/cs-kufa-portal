@@ -298,22 +298,83 @@ export default function AnnouncementsManagement() {
     return supabase.storage.from("lecture-pdfs").getPublicUrl(path).data.publicUrl;
   };
 
+  // دالة مساعدة لترتيب وعرض كارد التبليغ/الإعلان
+  const renderAnnouncementCard = (
+    item: Announcement,
+    getImageUrl: (path: string | null) => string,
+    onEdit: (item: Announcement) => void,
+    onDelete: (item: Announcement) => void,
+    onPreview: (url: string) => void
+  ) => {
+    const imgUrl = getImageUrl(item.image_url);
+
+    return (
+      <div key={item.id} className="flex flex-col gap-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-4 shadow-sm">
+        <div className="flex items-start justify-between gap-2">
+          <h4 className="font-bold text-slate-900 dark:text-white text-sm">{item.title}</h4>
+          <div className="flex items-center gap-1 shrink-0">
+            <button onClick={() => onEdit(item)} className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20 transition-colors cursor-pointer" title="تعديل">
+              <Edit3 size={13} />
+            </button>
+            <button onClick={() => onDelete(item)} className="flex h-7 w-7 items-center justify-center rounded-lg bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500/20 transition-colors cursor-pointer" title="حذف">
+              <Trash2 size={13} />
+            </button>
+          </div>
+        </div>
+
+        {item.description && (
+          <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">{item.description}</p>
+        )}
+
+        {item.type === "exam" && (
+          <div className="flex flex-wrap gap-2 pt-1 text-[11px] text-slate-500 dark:text-slate-400">
+            {item.exam_date && (
+              <span className="flex items-center gap-1 bg-slate-200 dark:bg-slate-800 px-2 py-1 rounded-md">
+                <Calendar size={12} className="text-rose-500" /> {item.exam_date}
+              </span>
+            )}
+            {item.exam_time && (
+              <span className="flex items-center gap-1 bg-slate-200 dark:bg-slate-800 px-2 py-1 rounded-md">
+                <Clock size={12} className="text-rose-500" /> {item.exam_time}
+              </span>
+            )}
+          </div>
+        )}
+
+        {item.type === "assignment" && item.due_date && (
+          <div className="pt-1 text-[11px] text-amber-600 dark:text-amber-400">
+            <span>موعد التسليم: {item.due_date}</span>
+          </div>
+        )}
+
+        {imgUrl && (
+          <div 
+            onClick={() => onPreview(imgUrl)}
+            className="relative aspect-video w-full cursor-pointer overflow-hidden rounded-xl bg-slate-200 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-center mt-1"
+          >
+            <img src={imgUrl} alt="مرفق" className="h-full w-full object-cover" />
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const generalAnnouncements = announcements.filter(a => a.type === "announcement");
   const managementAnnouncements = announcements.filter(a => a.type === "management");
   const assignmentAnnouncements = announcements.filter(a => a.type === "assignment");
   const examAnnouncements = announcements.filter(a => a.type === "exam");
 
   return (
-    <div dir="rtl" className="min-h-screen bg-slate-950 p-4 sm:p-6 lg:p-8 text-white">
+    <div dir="rtl" className="min-h-screen bg-slate-50 dark:bg-slate-950 p-4 sm:p-6 lg:p-8 text-slate-900 dark:text-white transition-colors duration-300">
       <div className="mx-auto max-w-7xl">
-        <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between rounded-3xl border border-slate-800 bg-[#111827] p-6 shadow-sm">
+        <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 shadow-sm">
           <div className="flex items-center gap-4">
-            <Link to="/admin" className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-800 text-slate-300 hover:bg-slate-700 transition-colors">
+            <Link to="/admin" className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
               <ArrowRight size={22} />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-white">إدارة التبليغات والإعلانات</h1>
-              <p className="text-sm text-slate-400">عرض مبوب ومرتب حسب الأقسام (إعلانات، إدارة، واجبات، امتحانات)</p>
+              <h1 className="text-2xl font-bold text-slate-900 dark:text-white">إدارة التبليغات والإعلانات</h1>
+              <p className="text-sm text-slate-500 dark:text-slate-400">عرض مبوب ومرتب حسب الأقسام (إعلانات، إدارة، واجبات، امتحانات)</p>
             </div>
           </div>
 
@@ -325,90 +386,90 @@ export default function AnnouncementsManagement() {
 
         {loading ? (
           <div className="flex h-64 items-center justify-center">
-            <Loader2 size={36} className="animate-spin text-indigo-400" />
+            <Loader2 size={36} className="animate-spin text-indigo-600 dark:text-indigo-400" />
           </div>
         ) : error ? (
-          <div className="rounded-3xl border border-red-500/20 bg-red-500/10 p-8 text-center text-red-400">
+          <div className="rounded-3xl border border-red-500/20 bg-red-500/10 p-8 text-center text-red-600 dark:text-red-400">
             <AlertCircle size={36} className="mx-auto mb-2" />
             <p>{error}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
             
-            <div className="flex flex-col rounded-3xl border border-slate-800 bg-[#111827] p-4 shadow-lg">
-              <div className="flex items-center gap-2.5 pb-4 mb-4 border-b border-slate-800">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-400">
+            <div className="flex flex-col rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-4 shadow-sm dark:shadow-lg">
+              <div className="flex items-center gap-2.5 pb-4 mb-4 border-b border-slate-200 dark:border-slate-800">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
                   <Megaphone size={18} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-sm">الإعلانات العامة</h3>
-                  <span className="text-[10px] text-slate-400">{generalAnnouncements.length} إعلان</span>
+                  <h3 className="font-bold text-slate-900 dark:text-white text-sm">الإعلانات العامة</h3>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400">{generalAnnouncements.length} إعلان</span>
                 </div>
               </div>
 
               <div className="flex flex-col gap-4 overflow-y-auto max-h-[70vh]">
                 {generalAnnouncements.length === 0 ? (
-                  <p className="text-center text-xs text-slate-500 py-8">لا توجد إعلانات عامة</p>
+                  <p className="text-center text-xs text-slate-400 dark:text-slate-500 py-8">لا توجد إعلانات عامة</p>
                 ) : (
                   generalAnnouncements.map((item) => renderAnnouncementCard(item, getPublicImageUrl, initiateEdit, initiateDelete, setPreviewImage))
                 )}
               </div>
             </div>
 
-            <div className="flex flex-col rounded-3xl border border-slate-800 bg-[#111827] p-4 shadow-lg">
-              <div className="flex items-center gap-2.5 pb-4 mb-4 border-b border-slate-800">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/10 text-amber-400">
+            <div className="flex flex-col rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-4 shadow-sm dark:shadow-lg">
+              <div className="flex items-center gap-2.5 pb-4 mb-4 border-b border-slate-200 dark:border-slate-800">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
                   <ShieldAlert size={18} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-sm">تبليغات الإدارة</h3>
-                  <span className="text-[10px] text-slate-400">{managementAnnouncements.length} تبليغ</span>
+                  <h3 className="font-bold text-slate-900 dark:text-white text-sm">تبليغات الإدارة</h3>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400">{managementAnnouncements.length} تبليغ</span>
                 </div>
               </div>
 
               <div className="flex flex-col gap-4 overflow-y-auto max-h-[70vh]">
                 {managementAnnouncements.length === 0 ? (
-                  <p className="text-center text-xs text-slate-500 py-8">لا توجد تبليغات إدارية</p>
+                  <p className="text-center text-xs text-slate-400 dark:text-slate-500 py-8">لا توجد تبليغات إدارية</p>
                 ) : (
                   managementAnnouncements.map((item) => renderAnnouncementCard(item, getPublicImageUrl, initiateEdit, initiateDelete, setPreviewImage))
                 )}
               </div>
             </div>
 
-            <div className="flex flex-col rounded-3xl border border-slate-800 bg-[#111827] p-4 shadow-lg">
-              <div className="flex items-center gap-2.5 pb-4 mb-4 border-b border-slate-800">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400">
+            <div className="flex flex-col rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-4 shadow-sm dark:shadow-lg">
+              <div className="flex items-center gap-2.5 pb-4 mb-4 border-b border-slate-200 dark:border-slate-800">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                   <CheckSquare size={18} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-sm">تبليغات الواجبات</h3>
-                  <span className="text-[10px] text-slate-400">{assignmentAnnouncements.length} واجب</span>
+                  <h3 className="font-bold text-slate-900 dark:text-white text-sm">تبليغات الواجبات</h3>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400">{assignmentAnnouncements.length} واجب</span>
                 </div>
               </div>
 
               <div className="flex flex-col gap-4 overflow-y-auto max-h-[70vh]">
                 {assignmentAnnouncements.length === 0 ? (
-                  <p className="text-center text-xs text-slate-500 py-8">لا توجد تبليغات واجبات</p>
+                  <p className="text-center text-xs text-slate-400 dark:text-slate-500 py-8">لا توجد تبليغات واجبات</p>
                 ) : (
                   assignmentAnnouncements.map((item) => renderAnnouncementCard(item, getPublicImageUrl, initiateEdit, initiateDelete, setPreviewImage))
                 )}
               </div>
             </div>
 
-            <div className="flex flex-col rounded-3xl border border-slate-800 bg-[#111827] p-4 shadow-lg">
-              <div className="flex items-center gap-2.5 pb-4 mb-4 border-b border-slate-800">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-rose-500/10 text-rose-400">
+            <div className="flex flex-col rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-4 shadow-sm dark:shadow-lg">
+              <div className="flex items-center gap-2.5 pb-4 mb-4 border-b border-slate-200 dark:border-slate-800">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400">
                   <BookOpen size={18} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-sm">تبليغات الامتحانات</h3>
-                  <span className="text-[10px] text-slate-400">{examAnnouncements.length} امتحان</span>
+                  <h3 className="font-bold text-slate-900 dark:text-white text-sm">تبليغات الامتحانات</h3>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400">{examAnnouncements.length} امتحان</span>
                 </div>
               </div>
 
               <div className="flex flex-col gap-4 overflow-y-auto max-h-[70vh]">
                 {examAnnouncements.length === 0 ? (
-                  <p className="text-center text-xs text-slate-500 py-8">لا توجد تبليغات امتحانات</p>
+                  <p className="text-center text-xs text-slate-400 dark:text-slate-500 py-8">لا توجد تبليغات امتحانات</p>
                 ) : (
                   examAnnouncements.map((item) => renderAnnouncementCard(item, getPublicImageUrl, initiateEdit, initiateDelete, setPreviewImage))
                 )}
@@ -420,19 +481,19 @@ export default function AnnouncementsManagement() {
 
         {isAddModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
-            <div className="w-full max-w-lg rounded-3xl border border-slate-800 bg-[#111827] p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div className="w-full max-w-lg rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
               <div className="mb-6 flex items-center justify-between">
-                <h3 className="text-xl font-bold text-white">نشر تبليغ أو إعلان جديد</h3>
-                <button onClick={() => setIsAddModalOpen(false)} className="rounded-xl p-2 text-slate-400 hover:bg-slate-800 cursor-pointer"><X size={20} /></button>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white">نشر تبليغ أو إعلان جديد</h3>
+                <button onClick={() => setIsAddModalOpen(false)} className="rounded-xl p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"><X size={20} /></button>
               </div>
 
               <form onSubmit={handleAddAnnouncement} className="space-y-4">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-300">نوع التبليغ / الإعلان</label>
+                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">نوع التبليغ / الإعلان</label>
                   <select 
                     value={type} 
                     onChange={(e: any) => setType(e.target.value)}
-                    className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-3.5 text-white outline-none focus:border-indigo-500"
+                    className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-indigo-500"
                   >
                     <option value="announcement">📢 إعلان عام</option>
                     <option value="exam">📝 تبليغ امتحان (يُفعل العد التنازلي بالرئيسية)</option>
@@ -442,7 +503,7 @@ export default function AnnouncementsManagement() {
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-300">
+                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                     {type === "exam" ? "نوع أو عنوان الامتحان (مثل: نهائي / شهري)" : type === "assignment" ? "اسم الواجب" : "عنوان التبليغ"}
                   </label>
                   <input 
@@ -450,7 +511,7 @@ export default function AnnouncementsManagement() {
                     required 
                     value={title} 
                     onChange={(e) => setTitle(e.target.value)} 
-                    className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-3.5 text-white outline-none focus:border-indigo-500" 
+                    className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-indigo-500" 
                     placeholder="اكتب العنوان هنا..." 
                   />
                 </div>
@@ -458,23 +519,23 @@ export default function AnnouncementsManagement() {
                 {type === "exam" && (
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="mb-2 block text-xs font-medium text-slate-300">تاريخ الامتحان</label>
+                      <label className="mb-2 block text-xs font-medium text-slate-700 dark:text-slate-300">تاريخ الامتحان</label>
                       <input 
                         type="date" 
                         required 
                         value={examDate} 
                         onChange={(e) => setExamDate(e.target.value)} 
-                        className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-3 text-white outline-none focus:border-indigo-500 text-xs" 
+                        className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3 text-slate-900 dark:text-white outline-none focus:border-indigo-500 text-xs" 
                       />
                     </div>
                     <div>
-                      <label className="mb-2 block text-xs font-medium text-slate-300">وقت البدء (صيغة رقمية 24 ساعة)</label>
+                      <label className="mb-2 block text-xs font-medium text-slate-700 dark:text-slate-300">وقت البدء (صيغة رقمية 24 ساعة)</label>
                       <input 
                         type="time" 
                         required 
                         value={examTime} 
                         onChange={(e) => setExamTime(e.target.value)} 
-                        className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-3 text-white outline-none focus:border-indigo-500 text-xs" 
+                        className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3 text-slate-900 dark:text-white outline-none focus:border-indigo-500 text-xs" 
                       />
                     </div>
                   </div>
@@ -482,43 +543,43 @@ export default function AnnouncementsManagement() {
 
                 {type === "assignment" && (
                   <div>
-                    <label className="mb-2 block text-xs font-medium text-slate-300">موعد التسليم النهائي</label>
+                    <label className="mb-2 block text-xs font-medium text-slate-700 dark:text-slate-300">موعد التسليم النهائي</label>
                     <input 
                       type="date" 
                       required 
                       value={dueDate} 
                       onChange={(e) => setDueDate(e.target.value)} 
-                      className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-3.5 text-white outline-none focus:border-indigo-500 text-xs" 
+                      className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-indigo-500 text-xs" 
                     />
                   </div>
                 )}
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-300">
+                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                     {type === "exam" ? "القاعة أو الملاحظات" : "الوصف أو التفاصيل"}
                   </label>
                   <textarea 
                     rows={3} 
                     value={description} 
                     onChange={(e) => setDescription(e.target.value)} 
-                    className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-3.5 text-white outline-none focus:border-indigo-500" 
+                    className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-indigo-500" 
                     placeholder={type === "exam" ? "اسم القاعة أو الملاحظات..." : "محتوى التبليغ أو التعليمات..."} 
                   />
                 </div>
 
                 {type !== "exam" && (
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-300">رفع صورة (اختياري)</label>
-                    <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-700 bg-slate-900 p-4 hover:border-indigo-500">
-                      <ImageIcon size={20} className="text-indigo-400" />
-                      <span className="text-sm font-medium text-slate-300">{imageFile ? imageFile.name : "اختر صورة للإعلان"}</span>
+                    <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">رفع صورة (اختياري)</label>
+                    <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-4 hover:border-indigo-500">
+                      <ImageIcon size={20} className="text-indigo-600 dark:text-indigo-400" />
+                      <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{imageFile ? imageFile.name : "اختر صورة للإعلان"}</span>
                       <input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files?.[0] || null)} className="hidden" />
                     </label>
                   </div>
                 )}
 
                 <div className="mt-6 flex justify-end gap-3">
-                  <button type="button" onClick={() => setIsAddModalOpen(false)} className="rounded-2xl border border-slate-800 px-6 py-3 text-sm font-bold text-slate-300 hover:bg-slate-800 cursor-pointer">إلغاء</button>
+                  <button type="button" onClick={() => setIsAddModalOpen(false)} className="rounded-2xl border border-slate-200 dark:border-slate-800 px-6 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">إلغاء</button>
                   <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 disabled:opacity-50 cursor-pointer">
                     {submitting && <Loader2 size={18} className="animate-spin" />}
                     <span>{uploadingFile ? "جاري الرفع..." : "نشر التبليغ"}</span>
@@ -531,19 +592,19 @@ export default function AnnouncementsManagement() {
 
         {isEditModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
-            <div className="w-full max-w-lg rounded-3xl border border-slate-800 bg-[#111827] p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div className="w-full max-w-lg rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
               <div className="mb-6 flex items-center justify-between">
-                <h3 className="text-xl font-bold text-white">تعديل معلومات الإعلان / التبليغ</h3>
-                <button onClick={() => setIsEditModalOpen(false)} className="rounded-xl p-2 text-slate-400 hover:bg-slate-800 cursor-pointer"><X size={20} /></button>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white">تعديل معلومات الإعلان / التبليغ</h3>
+                <button onClick={() => setIsEditModalOpen(false)} className="rounded-xl p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"><X size={20} /></button>
               </div>
 
               <form onSubmit={handleEditAnnouncement} className="space-y-4">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-300">نوع التبليغ / الإعلان</label>
+                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">نوع التبليغ / الإعلان</label>
                   <select 
                     value={editType} 
                     onChange={(e: any) => setEditType(e.target.value)}
-                    className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-3.5 text-white outline-none focus:border-indigo-500"
+                    className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-indigo-500"
                   >
                     <option value="announcement">📢 إعلان عام</option>
                     <option value="exam">📝 تبليغ امتحان</option>
@@ -553,36 +614,36 @@ export default function AnnouncementsManagement() {
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-300">العنوان</label>
+                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">العنوان</label>
                   <input 
                     type="text" 
                     required 
                     value={editTitle} 
                     onChange={(e) => setEditTitle(e.target.value)} 
-                    className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-3.5 text-white outline-none focus:border-indigo-500" 
+                    className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-indigo-500" 
                   />
                 </div>
 
                 {editType === "exam" && (
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="mb-2 block text-xs font-medium text-slate-300">تاريخ الامتحان</label>
+                      <label className="mb-2 block text-xs font-medium text-slate-700 dark:text-slate-300">تاريخ الامتحان</label>
                       <input 
                         type="date" 
                         required 
                         value={editExamDate} 
                         onChange={(e) => setEditExamDate(e.target.value)} 
-                        className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-3 text-white outline-none focus:border-indigo-500 text-xs" 
+                        className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3 text-slate-900 dark:text-white outline-none focus:border-indigo-500 text-xs" 
                       />
                     </div>
                     <div>
-                      <label className="mb-2 block text-xs font-medium text-slate-300">وقت البدء</label>
+                      <label className="mb-2 block text-xs font-medium text-slate-700 dark:text-slate-300">وقت البدء</label>
                       <input 
                         type="time" 
                         required 
                         value={editExamTime} 
                         onChange={(e) => setEditExamTime(e.target.value)} 
-                        className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-3 text-white outline-none focus:border-indigo-500 text-xs" 
+                        className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3 text-slate-900 dark:text-white outline-none focus:border-indigo-500 text-xs" 
                       />
                     </div>
                   </div>
@@ -590,40 +651,40 @@ export default function AnnouncementsManagement() {
 
                 {editType === "assignment" && (
                   <div>
-                    <label className="mb-2 block text-xs font-medium text-slate-300">موعد التسليم النهائي</label>
+                    <label className="mb-2 block text-xs font-medium text-slate-700 dark:text-slate-300">موعد التسليم النهائي</label>
                     <input 
                       type="date" 
                       required 
                       value={editDueDate} 
                       onChange={(e) => setEditDueDate(e.target.value)} 
-                      className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-3.5 text-white outline-none focus:border-indigo-500 text-xs" 
+                      className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-indigo-500 text-xs" 
                     />
                   </div>
                 )}
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-300">الوصف أو التفاصيل</label>
+                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">الوصف أو التفاصيل</label>
                   <textarea 
                     rows={3} 
                     value={editDescription} 
                     onChange={(e) => setEditDescription(e.target.value)} 
-                    className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-3.5 text-white outline-none focus:border-indigo-500" 
+                    className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-indigo-500" 
                   />
                 </div>
 
                 {editType !== "exam" && (
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-300">تغيير الصورة (اختياري)</label>
-                    <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-700 bg-slate-900 p-4 hover:border-indigo-500">
-                      <ImageIcon size={20} className="text-indigo-400" />
-                      <span className="text-sm font-medium text-slate-300">{editImageFile ? editImageFile.name : "اختر صورة جديدة أو اتركه كما هو"}</span>
+                    <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">تغيير الصورة (اختياري)</label>
+                    <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-4 hover:border-indigo-500">
+                      <ImageIcon size={20} className="text-indigo-600 dark:text-indigo-400" />
+                      <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{editImageFile ? editImageFile.name : "اختر صورة جديدة أو اتركه كما هو"}</span>
                       <input type="file" accept="image/*" onChange={(e) => setEditImageFile(e.target.files?.[0] || null)} className="hidden" />
                     </label>
                   </div>
                 )}
 
                 <div className="mt-6 flex justify-end gap-3">
-                  <button type="button" onClick={() => setIsEditModalOpen(false)} className="rounded-2xl border border-slate-800 px-6 py-3 text-sm font-bold text-slate-300 hover:bg-slate-800 cursor-pointer">إلغاء</button>
+                  <button type="button" onClick={() => setIsEditModalOpen(false)} className="rounded-2xl border border-slate-200 dark:border-slate-800 px-6 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">إلغاء</button>
                   <button type="submit" disabled={editingSubmitting} className="flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 disabled:opacity-50 cursor-pointer">
                     {editingSubmitting && <Loader2 size={18} className="animate-spin" />}
                     <span>حفظ التعديلات</span>
@@ -647,12 +708,12 @@ export default function AnnouncementsManagement() {
 
         {deleteStep === "swear" && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
-            <div className="w-full max-w-md rounded-3xl border border-slate-800 bg-[#111827] p-6 shadow-2xl text-center">
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-400">
+            <div className="w-full max-w-md rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 shadow-2xl text-center">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
                 <AlertCircle size={28} />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">قسم الحذف المؤكد</h3>
-              <p className="text-sm text-slate-400 mb-4">إذا متأكد من حذف هذا التبليغ، احلف بالله واكتب كلمة <span className="font-bold text-indigo-400">والله</span> في الحقل أدناه:</p>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">قسم الحذف المؤكد</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">إذا متأكد من حذف هذا التبليغ، احلف بالله واكتب كلمة <span className="font-bold text-indigo-600 dark:text-indigo-400">والله</span> في الحقل أدناه:</p>
 
               <input
                 type="text"
@@ -662,15 +723,15 @@ export default function AnnouncementsManagement() {
                   setSwearError("");
                 }}
                 placeholder="اكتب: والله"
-                className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-3.5 text-center text-white outline-none focus:border-indigo-500 mb-2"
+                className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-center text-slate-900 dark:text-white outline-none focus:border-indigo-500 mb-2"
               />
 
               {swearError && (
-                <p className="text-xs font-bold text-red-400 mb-4 animate-bounce">{swearError}</p>
+                <p className="text-xs font-bold text-red-600 dark:text-red-400 mb-4 animate-bounce">{swearError}</p>
               )}
 
               <div className="flex gap-3 mt-4">
-                <button onClick={() => setDeleteStep(null)} className="flex-1 rounded-2xl border border-slate-800 py-3 text-sm font-bold text-slate-300 hover:bg-slate-800 cursor-pointer">
+                <button onClick={() => setDeleteStep(null)} className="flex-1 rounded-2xl border border-slate-200 dark:border-slate-800 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
                   إلغاء
                 </button>
                 <button onClick={handleFinalDeleteAction} className="flex-1 rounded-2xl bg-indigo-600 py-3 text-sm font-bold text-white hover:bg-indigo-700 shadow-lg shadow-indigo-600/20 cursor-pointer">
@@ -683,15 +744,15 @@ export default function AnnouncementsManagement() {
 
         {deleteStep === "confirm" && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
-            <div className="w-full max-w-md rounded-3xl border border-slate-800 bg-[#111827] p-6 shadow-2xl text-center">
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-red-500/10 text-red-400">
+            <div className="w-full max-w-md rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 shadow-2xl text-center">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-red-500/10 text-red-600 dark:text-red-400">
                 <AlertCircle size={28} />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">تأكيد الحذف</h3>
-              <p className="text-sm text-slate-400 mb-6">أنت متأكد تريد حذف هذا التبليغ؟</p>
-              
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">تأكيد الحذف</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">هل أنت متأكد من حذف هذا التبليغ؟</p>
+
               <div className="flex gap-3">
-                <button onClick={() => handleFirstConfirm(false)} className="flex-1 rounded-2xl border border-slate-800 py-3 text-sm font-bold text-slate-300 hover:bg-slate-800 cursor-pointer">
+                <button onClick={() => handleFirstConfirm(false)} className="flex-1 rounded-2xl border border-slate-200 dark:border-slate-800 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
                   لا
                 </button>
                 <button onClick={() => handleFirstConfirm(true)} className="flex-1 rounded-2xl bg-red-600 py-3 text-sm font-bold text-white hover:bg-red-700 shadow-lg shadow-red-600/20 cursor-pointer">
@@ -702,75 +763,6 @@ export default function AnnouncementsManagement() {
           </div>
         )}
       </div>
-    </div>
-  );
-}
-
-function renderAnnouncementCard(
-  item: Announcement, 
-  getPublicImageUrl: (path: string | null) => string, 
-  initiateEdit: (item: Announcement) => void,
-  initiateDelete: (item: Announcement) => void, 
-  setPreviewImage: (url: string) => void
-) {
-  const imgUrl = getPublicImageUrl(item.image_url);
-
-  return (
-    <div key={item.id} className="flex flex-col justify-between rounded-2xl border border-slate-800 bg-slate-900/60 p-4 shadow-sm hover:border-slate-700 transition-all">
-      <div>
-        <div className="flex items-center justify-between mb-2">
-          <h4 className="font-bold text-white text-sm line-clamp-1">{item.title}</h4>
-          <div className="flex items-center gap-1.5 shrink-0">
-            <button onClick={() => initiateEdit(item)} className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 transition-colors cursor-pointer" title="تعديل">
-              <Edit3 size={13} />
-            </button>
-            <button onClick={() => initiateDelete(item)} className="flex h-7 w-7 items-center justify-center rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors cursor-pointer" title="حذف">
-              <Trash2 size={13} />
-            </button>
-          </div>
-        </div>
-
-        {item.description && (
-          <p className="text-xs text-slate-300 mb-3 whitespace-pre-wrap leading-relaxed line-clamp-3">{item.description}</p>
-        )}
-
-        {item.type === "exam" && (
-          <div className="mb-3 rounded-xl bg-slate-950 p-2.5 text-[11px] space-y-1 text-slate-300 border border-slate-800">
-            {item.exam_date && (
-              <div className="flex items-center gap-1.5">
-                <Calendar size={13} className="text-rose-400" />
-                <span>التاريخ: {item.exam_date}</span>
-              </div>
-            )}
-            {item.exam_time && (
-              <div className="flex items-center gap-1.5">
-                <Clock size={13} className="text-rose-400" />
-                <span>الوقت: {item.exam_time}</span>
-              </div>
-            )}
-          </div>
-        )}
-
-        {item.type === "assignment" && item.due_date && (
-          <div className="mb-3 rounded-xl bg-slate-950 p-2.5 text-[11px] flex items-center gap-1.5 text-slate-300 border border-slate-800">
-            <Calendar size={13} className="text-emerald-400" />
-            <span>التسليم: {item.due_date}</span>
-          </div>
-        )}
-
-        {imgUrl && (
-          <div 
-            onClick={() => setPreviewImage(imgUrl)}
-            className="relative mb-3 aspect-video w-full cursor-pointer overflow-hidden rounded-xl bg-slate-950 border border-slate-800"
-          >
-            <img src={imgUrl} alt="صورة التبليغ" className="h-full w-full object-cover hover:scale-105 transition-transform" />
-          </div>
-        )}
-      </div>
-
-      <span className="text-[9px] text-slate-500 pt-2 border-t border-slate-800/60 block">
-        {new Date(item.created_at || "").toLocaleString("ar-IQ", { dateStyle: "short", timeStyle: "short" })}
-      </span>
     </div>
   );
 }

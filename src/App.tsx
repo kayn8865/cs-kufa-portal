@@ -41,6 +41,7 @@ import EntertainmentManagement from "./admin/EntertainmentManagement";
 
 function MainLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isDark, setIsDark] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -75,17 +76,30 @@ function MainLayout() {
   useEffect(() => {
     const theme = localStorage.getItem("theme");
     const root = window.document.documentElement;
-    if (theme === "dark" || (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+    const darkCheck = theme === "dark" || (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    
+    if (darkCheck) {
       root.classList.add("dark");
+      setIsDark(true);
     } else {
       root.classList.remove("dark");
+      setIsDark(false);
     }
-  }, []);
+
+    const interval = setInterval(() => {
+      const currentDark = root.classList.contains("dark");
+      if (currentDark !== isDark) {
+        setIsDark(currentDark);
+      }
+    }, 200);
+
+    return () => clearInterval(interval);
+  }, [isDark, location]);
 
   return (
     <div dir="rtl" className="min-h-screen bg-slate-50 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-white">
       <Header
-        darkMode={document.documentElement.classList.contains("dark")}
+        darkMode={isDark}
         onMenu={() => setMenuOpen(true)}
         onNotifications={() => navigate("/notifications")}
       />
