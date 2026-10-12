@@ -1,3 +1,123 @@
+/* الألوان الـ 20 المتاحة لتخصيص التطبيق وخلفياتها الخفيفة المتناسقة */
+:root,
+[data-theme-color="indigo"] { 
+  --color-primary: #4f46e5; 
+  --color-bg-soft: rgba(79, 70, 229, 0.12); 
+}
+[data-theme-color="blue"] { 
+  --color-primary: #2563eb; 
+  --color-bg-soft: rgba(37, 99, 235, 0.12); 
+}
+[data-theme-color="sky"] { 
+  --color-primary: #0284c7; 
+  --color-bg-soft: rgba(2, 132, 199, 0.12); 
+}
+[data-theme-color="cyan"] { 
+  --color-primary: #0891b2; 
+  --color-bg-soft: rgba(8, 145, 178, 0.12); 
+}
+[data-theme-color="teal"] { 
+  --color-primary: #0d9488; 
+  --color-bg-soft: rgba(13, 148, 136, 0.12); 
+}
+[data-theme-color="emerald"] { 
+  --color-primary: #059669; 
+  --color-bg-soft: rgba(5, 150, 105, 0.12); 
+}
+[data-theme-color="green"] { 
+  --color-primary: #16a34a; 
+  --color-bg-soft: rgba(22, 163, 74, 0.12); 
+}
+[data-theme-color="lime"] { 
+  --color-primary: #65a30d; 
+  --color-bg-soft: rgba(101, 163, 13, 0.12); 
+}
+[data-theme-color="amber"] { 
+  --color-primary: #d97706; 
+  --color-bg-soft: rgba(217, 119, 6, 0.12); 
+}
+[data-theme-color="orange"] { 
+  --color-primary: #ea580c; 
+  --color-bg-soft: rgba(234, 88, 12, 0.12); 
+}
+[data-theme-color="red"] { 
+  --color-primary: #dc2626; 
+  --color-bg-soft: rgba(220, 38, 38, 0.12); 
+}
+[data-theme-color="rose"] { 
+  --color-primary: #e11d48; 
+  --color-bg-soft: rgba(225, 29, 72, 0.12); 
+}
+[data-theme-color="pink"] { 
+  --color-primary: #db2777; 
+  --color-bg-soft: rgba(219, 39, 119, 0.12); 
+}
+[data-theme-color="purple"] { 
+  --color-primary: #9333ea; 
+  --color-bg-soft: rgba(147, 51, 234, 0.12); 
+}
+[data-theme-color="violet"] { 
+  --color-primary: #7c3aed; 
+  --color-bg-soft: rgba(124, 58, 237, 0.12); 
+}
+[data-theme-color="slate"] { 
+  --color-primary: #475569; 
+  --color-bg-soft: rgba(71, 85, 105, 0.12); 
+}
+[data-theme-color="zinc"] { 
+  --color-primary: #52525b; 
+  --color-bg-soft: rgba(82, 82, 91, 0.12); 
+}
+[data-theme-color="teal-dark"] { 
+  --color-primary: #115e59; 
+  --color-bg-soft: rgba(17, 94, 89, 0.12); 
+}
+[data-theme-color="gold"] { 
+  --color-primary: #ca8a04; 
+  --color-bg-soft: rgba(202, 138, 4, 0.12); 
+}
+[data-theme-color="crimson"] { 
+  --color-primary: #991b1b; 
+  --color-bg-soft: rgba(153, 27, 27, 0.12); 
+}
+
+/* كلاسات التطبيق الديناميكية الشاملة */
+.dynamic-bg {
+  background-color: var(--color-primary) !important;
+}
+
+.dynamic-soft-bg {
+  background-color: var(--color-bg-soft) !important;
+}
+
+.dynamic-text {
+  color: var(--color-primary) !important;
+}
+
+.dynamic-border {
+  border-color: var(--color-primary) !important;
+}
+
+/* تطبيق الألوان الديناميكية على كلاسات Tailwind الشائعة في الموقع تلقائياً */
+.bg-indigo-600 {
+  background-color: var(--color-primary) !important;
+}
+.hover\:bg-indigo-700:hover {
+  background-color: var(--color-primary) !important;
+  filter: brightness(0.9);
+}
+.text-indigo-600, .dark\:text-indigo-400 {
+  color: var(--color-primary) !important;
+}
+.bg-indigo-50, .dark\:bg-indigo-500\/10, .bg-indigo-500\/10 {
+  background-color: var(--color-bg-soft) !important;
+}
+.border-indigo-500\/20, .border-indigo-200, .dark\:border-indigo-900 {
+  border-color: var(--color-primary) !important;
+  opacity: 0.3;
+}
+
+/* التنسيقات العامة السابقة */
 .counter {
   font-size: 16px;
   padding: 5px 10px;
@@ -7,178 +127,11 @@
   border: 2px solid transparent;
   transition: border-color 0.3s;
   margin-bottom: 24px;
-
-  &:hover {
-    border-color: var(--accent-border);
-  }
-  &:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
 }
-
-.hero {
-  position: relative;
-
-  .base,
-  .framework,
-  .vite {
-    inset-inline: 0;
-    margin: 0 auto;
-  }
-
-  .base {
-    width: 170px;
-    position: relative;
-    z-index: 0;
-  }
-
-  .framework,
-  .vite {
-    position: absolute;
-  }
-
-  .framework {
-    z-index: 1;
-    top: 34px;
-    height: 28px;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
-  }
-
-  .vite {
-    z-index: 0;
-    top: 107px;
-    height: 26px;
-    width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
-  }
+.counter:hover {
+  border-color: var(--accent-border);
 }
-
-#center {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
-
-  @media (max-width: 1024px) {
-    padding: 32px 20px 24px;
-    gap: 18px;
-  }
-}
-
-#next-steps {
-  display: flex;
-  border-top: 1px solid var(--border);
-  text-align: left;
-
-  & > div {
-    flex: 1 1 0;
-    padding: 32px;
-    @media (max-width: 1024px) {
-      padding: 24px 20px;
-    }
-  }
-
-  .icon {
-    margin-bottom: 16px;
-    width: 22px;
-    height: 22px;
-  }
-
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    text-align: center;
-  }
-}
-
-#docs {
-  border-right: 1px solid var(--border);
-
-  @media (max-width: 1024px) {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
-}
-
-#next-steps ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  gap: 8px;
-  margin: 32px 0 0;
-
-  .logo {
-    height: 18px;
-  }
-
-  a {
-    color: var(--text-h);
-    font-size: 16px;
-    border-radius: 6px;
-    background: var(--social-bg);
-    display: flex;
-    padding: 6px 12px;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    transition: box-shadow 0.3s;
-
-    &:hover {
-      box-shadow: var(--shadow);
-    }
-    .button-icon {
-      height: 18px;
-      width: 18px;
-    }
-  }
-
-  @media (max-width: 1024px) {
-    margin-top: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-
-    li {
-      flex: 1 1 calc(50% - 8px);
-    }
-
-    a {
-      width: 100%;
-      justify-content: center;
-      box-sizing: border-box;
-    }
-  }
-}
-
-#spacer {
-  height: 88px;
-  border-top: 1px solid var(--border);
-  @media (max-width: 1024px) {
-    height: 48px;
-  }
-}
-
-.ticks {
-  position: relative;
-  width: 100%;
-
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: -4.5px;
-    border: 5px solid transparent;
-  }
-
-  &::before {
-    left: 0;
-    border-left-color: var(--border);
-  }
-  &::after {
-    right: 0;
-    border-right-color: var(--border);
-  }
+.counter:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }

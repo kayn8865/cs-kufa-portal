@@ -90,14 +90,14 @@ export default function LecturesPage({
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-2 border-b border-slate-200 dark:border-slate-800/80">
         <button
           onClick={onBack}
-          className="flex items-center gap-2 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors w-fit cursor-pointer bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2 rounded-xl shadow-sm dark:shadow-md"
+          className="flex items-center gap-2 text-xs font-bold dynamic-text hover:opacity-85 transition-colors w-fit cursor-pointer bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2 rounded-xl shadow-sm dark:shadow-md"
         >
           <ArrowRight size={16} />
           <span>العودة إلى المواد الدراسية</span>
         </button>
 
         <div className="flex items-center gap-3 bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 px-5 py-2.5 rounded-2xl shadow-sm dark:shadow-lg">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl dynamic-soft-bg dynamic-text border border-indigo-500/20">
             <BookOpen size={18} />
           </div>
           <span className="text-base font-bold text-slate-900 dark:text-white tracking-wide">
@@ -110,13 +110,13 @@ export default function LecturesPage({
       {loading ? (
         <div className="flex h-64 items-center justify-center">
           <div className="flex items-center gap-3 text-slate-500 dark:text-slate-400">
-            <div className="h-6 w-6 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent"></div>
+            <div className="h-6 w-6 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent dynamic-border"></div>
             <span>جاري تحميل المحاضرات...</span>
           </div>
         </div>
       ) : lectures.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-12 text-center shadow-sm dark:shadow-xl">
-          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl dynamic-soft-bg dynamic-text border border-indigo-500/20">
             <FolderOpen size={32} />
           </div>
           <h3 className="text-lg font-bold text-slate-900 dark:text-white">لا توجد محاضرات مضافة لهذه المادة حالياً</h3>
@@ -129,7 +129,7 @@ export default function LecturesPage({
           {lectures.map((lec, index) => (
             <div
               key={lec.id || index}
-              className="group flex flex-col overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm dark:shadow-xl hover:border-indigo-500/50 transition-all duration-300"
+              className="group flex flex-col overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm dark:shadow-xl hover:border-[var(--color-primary)] transition-all duration-300"
             >
               {lec.image_url && (
                 <div 
@@ -142,7 +142,7 @@ export default function LecturesPage({
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-slate-900 via-transparent to-transparent" />
-                  <span className="absolute top-4 right-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md px-3 py-1 text-xs font-mono font-semibold text-indigo-600 dark:text-indigo-300 shadow-sm">
+                  <span className="absolute top-4 right-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md px-3 py-1 text-xs font-mono font-semibold dynamic-text shadow-sm">
                     محاضرة #{index + 1}
                   </span>
                 </div>
@@ -154,17 +154,17 @@ export default function LecturesPage({
                   className="flex items-start gap-4 flex-1 cursor-pointer"
                 >
                   {!lec.image_url && (
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl dynamic-soft-bg dynamic-text border border-indigo-500/20">
                       <FileText size={24} />
                     </div>
                   )}
                   <div className="space-y-1.5">
                     {!lec.image_url && (
-                      <span className="text-xs font-mono text-indigo-600 dark:text-indigo-400 font-semibold">
+                      <span className="text-xs font-mono dynamic-text font-semibold">
                         محاضرة #{index + 1}
                       </span>
                     )}
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">{lec.title}</h3>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white hover:dynamic-text transition-colors">{lec.title}</h3>
                     <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-2xl">
                       {lec.description || "لا توجد تفاصيل إضافية لهذه المحاضرة."}
                     </p>
@@ -184,7 +184,7 @@ export default function LecturesPage({
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="flex items-center gap-2 rounded-2xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 px-4 py-3 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:bg-indigo-600 hover:text-white dark:hover:bg-indigo-600 dark:hover:text-white transition-all shadow-inner cursor-pointer"
+                      className="flex items-center gap-2 rounded-2xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 px-4 py-3 text-xs font-bold dynamic-text hover:dynamic-bg hover:text-white transition-all shadow-inner cursor-pointer"
                     >
                       <Video size={16} />
                       <span>مشاهدة الفيديو</span>
@@ -197,7 +197,7 @@ export default function LecturesPage({
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="flex items-center gap-2 rounded-2xl bg-indigo-600 px-4 py-3 text-xs font-bold text-white hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 cursor-pointer"
+                      className="flex items-center gap-2 rounded-2xl dynamic-bg px-4 py-3 text-xs font-bold text-white transition-all shadow-lg hover:opacity-90 cursor-pointer"
                     >
                       <Download size={16} />
                       <span>تحميل الملف</span>

@@ -52,7 +52,7 @@ export default function SubjectsPage({ onSelectSubject }: SubjectsPageProps) {
     >
       {/* رأس الصفحة */}
       <div className="relative overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-8 shadow-sm dark:shadow-xl transition-colors duration-300">
-        <div className="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-indigo-600/10 blur-3xl pointer-events-none"></div>
+        <div className="absolute -left-20 -top-20 h-64 w-64 rounded-full dynamic-soft-bg blur-3xl pointer-events-none"></div>
         <div className="relative z-10 space-y-2">
           <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">المواد الدراسية</h1>
           <p className="text-sm text-slate-500 dark:text-slate-400 max-w-xl">
@@ -65,13 +65,13 @@ export default function SubjectsPage({ onSelectSubject }: SubjectsPageProps) {
       {loading ? (
         <div className="flex h-64 items-center justify-center">
           <div className="flex items-center gap-3 text-slate-500 dark:text-slate-400">
-            <div className="h-6 w-6 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent"></div>
+            <div className="h-6 w-6 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent dynamic-border"></div>
             <span>جاري تحميل المواد الدراسية...</span>
           </div>
         </div>
       ) : subjects.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-12 text-center shadow-sm dark:shadow-xl transition-colors duration-300">
-          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl dynamic-soft-bg dynamic-text border border-indigo-500/20">
             <FolderOpen size={32} />
           </div>
           <h3 className="text-lg font-bold text-slate-900 dark:text-white">لا توجد مواد مضافة حالياً</h3>
@@ -84,7 +84,8 @@ export default function SubjectsPage({ onSelectSubject }: SubjectsPageProps) {
           {subjects.map((sub) => (
             <div
               key={sub.id}
-              className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm dark:shadow-xl hover:border-indigo-500/50 transition-all duration-300"
+              style={{ '--hover-border': 'var(--color-primary)' } as React.CSSProperties}
+              className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm dark:shadow-xl hover:border-[var(--color-primary)] transition-all duration-300"
             >
               {/* عرض صورة المادة إذا توفرت */}
               {sub.image_url ? (
@@ -107,7 +108,7 @@ export default function SubjectsPage({ onSelectSubject }: SubjectsPageProps) {
                 <div>
                   {!sub.image_url && (
                     <div className="mb-4 flex items-center justify-between">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 group-hover:scale-110 transition-transform">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl dynamic-soft-bg dynamic-text border border-indigo-500/20 group-hover:scale-110 transition-transform">
                         <BookOpen size={24} />
                       </div>
                       {sub.code && (
@@ -128,7 +129,7 @@ export default function SubjectsPage({ onSelectSubject }: SubjectsPageProps) {
                   onClick={() => {
                     if (onSelectSubject) onSelectSubject(sub.id);
                   }}
-                  className="mt-6 flex items-center justify-between rounded-2xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 px-4 py-3 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:bg-indigo-600 hover:text-white dark:hover:bg-indigo-600 dark:hover:text-white transition-all cursor-pointer shadow-inner"
+                  className="mt-6 flex items-center justify-between rounded-2xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 px-4 py-3 text-xs font-bold dynamic-text hover:dynamic-bg hover:text-white transition-all cursor-pointer shadow-inner"
                 >
                   <span>استعراض محتوى المادة</span>
                   <ChevronLeft size={16} />

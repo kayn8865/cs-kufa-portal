@@ -79,7 +79,7 @@ export default function SchedulePage() {
     >
       {loading ? (
         <div className="flex h-64 flex-col items-center justify-center gap-4">
-          <Loader2 size={32} className="animate-spin text-indigo-600 dark:text-indigo-400" />
+          <Loader2 size={32} className="animate-spin dynamic-text" />
           <p className="text-slate-500 dark:text-slate-400">جاري تحميل الجدول...</p>
         </div>
       ) : error ? (
@@ -107,7 +107,7 @@ export default function SchedulePage() {
               className="flex flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900"
             >
               <h2 className="mb-6 flex items-center gap-3 text-xl font-bold text-slate-900 dark:text-white">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl dynamic-soft-bg dynamic-text">
                   <Calendar size={20} />
                 </span>
                 يوم {group.label}
@@ -120,7 +120,7 @@ export default function SchedulePage() {
                     className="flex flex-col gap-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800 dark:bg-slate-950/50"
                   >
                     <div className="flex items-start gap-4 sm:items-center">
-                      <div className="rounded-xl bg-indigo-50 p-2.5 text-indigo-600 shadow-sm dark:bg-indigo-500/10 dark:text-indigo-400">
+                      <div className="rounded-xl dynamic-soft-bg dynamic-text p-2.5 shadow-sm">
                         <BookOpen size={24} />
                       </div>
                       <div>
@@ -139,7 +139,7 @@ export default function SchedulePage() {
                     </div>
 
                     <div className="flex items-center gap-2 text-sm font-bold text-slate-700 sm:flex-col sm:items-end sm:gap-1 dark:text-slate-300">
-                      <Clock size={16} className="opacity-70 text-indigo-500" />
+                      <Clock size={16} className="opacity-70 dynamic-text" />
                       <div dir="ltr" className="flex items-center gap-1 text-right">
                         <span>{formatTime(item.end_time)}</span>
                         <span>-</span>

@@ -74,8 +74,10 @@ function MainLayout() {
   };
 
   useEffect(() => {
-    const theme = localStorage.getItem("theme");
     const root = window.document.documentElement;
+
+    // 1. استعادة وضع العرض (داكن / فاتح)
+    const theme = localStorage.getItem("theme");
     const darkCheck = theme === "dark" || (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches);
     
     if (darkCheck) {
@@ -85,6 +87,10 @@ function MainLayout() {
       root.classList.remove("dark");
       setIsDark(false);
     }
+
+    // 2. استعادة وتثبيت اللون المختار من الـ 20 لوناً عند كل تحديث أو تنقل
+    const savedColor = localStorage.getItem("colorTheme") || "indigo";
+    root.setAttribute("data-theme-color", savedColor);
 
     const interval = setInterval(() => {
       const currentDark = root.classList.contains("dark");
@@ -155,7 +161,11 @@ export default function App() {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // ضمان تطبيق اللون المحفوظ فور إقلاع التطبيق حتى قبل تحميل الجلسة
   useEffect(() => {
+    const savedColor = localStorage.getItem("colorTheme") || "indigo";
+    window.document.documentElement.setAttribute("data-theme-color", savedColor);
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setLoading(false);

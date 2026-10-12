@@ -2,6 +2,184 @@
 
 @variant dark (&:where(.dark, .dark *));
 
+/* تخصيص الـ 20 لوناً مع خلفياتهم الخفيفة المتناسقة للوضع الفاتح والداكن */
+:root, [data-theme-color="indigo"] { 
+  --color-primary: #4f46e5; 
+  --color-bg-soft: #e0e7ff; 
+}
+.dark [data-theme-color="indigo"], .dark:root { 
+  --color-bg-soft: rgba(79, 70, 229, 0.15); 
+}
+
+[data-theme-color="blue"] { 
+  --color-primary: #2563eb; 
+  --color-bg-soft: #dbeafe; 
+}
+.dark [data-theme-color="blue"] { 
+  --color-bg-soft: rgba(37, 99, 235, 0.15); 
+}
+
+[data-theme-color="sky"] { 
+  --color-primary: #0284c7; 
+  --color-bg-soft: #e0f2fe; 
+}
+.dark [data-theme-color="sky"] { 
+  --color-bg-soft: rgba(2, 132, 199, 0.15); 
+}
+
+[data-theme-color="cyan"] { 
+  --color-primary: #0891b2; 
+  --color-bg-soft: #cffafe; 
+}
+.dark [data-theme-color="cyan"] { 
+  --color-bg-soft: rgba(8, 145, 178, 0.15); 
+}
+
+[data-theme-color="teal"] { 
+  --color-primary: #0d9488; 
+  --color-bg-soft: #ccfbf1; 
+}
+.dark [data-theme-color="teal"] { 
+  --color-bg-soft: rgba(13, 148, 136, 0.15); 
+}
+
+[data-theme-color="emerald"] { 
+  --color-primary: #059669; 
+  --color-bg-soft: #d1fae5; 
+}
+.dark [data-theme-color="emerald"] { 
+  --color-bg-soft: rgba(5, 150, 105, 0.15); 
+}
+
+[data-theme-color="green"] { 
+  --color-primary: #16a34a; 
+  --color-bg-soft: #dcfce7; 
+}
+.dark [data-theme-color="green"] { 
+  --color-bg-soft: rgba(22, 163, 74, 0.15); 
+}
+
+[data-theme-color="lime"] { 
+  --color-primary: #65a30d; 
+  --color-bg-soft: #ecfccb; 
+}
+.dark [data-theme-color="lime"] { 
+  --color-bg-soft: rgba(101, 163, 13, 0.15); 
+}
+
+[data-theme-color="amber"] { 
+  --color-primary: #d97706; 
+  --color-bg-soft: #fef3c7; 
+}
+.dark [data-theme-color="amber"] { 
+  --color-bg-soft: rgba(217, 119, 6, 0.15); 
+}
+
+[data-theme-color="orange"] { 
+  --color-primary: #ea580c; 
+  --color-bg-soft: #ffedd5; 
+}
+.dark [data-theme-color="orange"] { 
+  --color-bg-soft: rgba(234, 88, 12, 0.15); 
+}
+
+[data-theme-color="red"] { 
+  --color-primary: #dc2626; 
+  --color-bg-soft: #fee2e2; 
+}
+.dark [data-theme-color="red"] { 
+  --color-bg-soft: rgba(220, 38, 38, 0.15); 
+}
+
+[data-theme-color="rose"] { 
+  --color-primary: #e11d48; 
+  --color-bg-soft: #ffe4e6; 
+}
+.dark [data-theme-color="rose"] { 
+  --color-bg-soft: rgba(225, 29, 72, 0.15); 
+}
+
+[data-theme-color="pink"] { 
+  --color-primary: #db2777; 
+  --color-bg-soft: #fce7f3; 
+}
+.dark [data-theme-color="pink"] { 
+  --color-bg-soft: rgba(219, 39, 119, 0.15); 
+}
+
+[data-theme-color="purple"] { 
+  --color-primary: #9333ea; 
+  --color-bg-soft: #f3e8ff; 
+}
+.dark [data-theme-color="purple"] { 
+  --color-bg-soft: rgba(147, 51, 234, 0.15); 
+}
+
+[data-theme-color="violet"] { 
+  --color-primary: #7c3aed; 
+  --color-bg-soft: #ede9fe; 
+}
+.dark [data-theme-color="violet"] { 
+  --color-bg-soft: rgba(124, 58, 237, 0.15); 
+}
+
+[data-theme-color="slate"] { 
+  --color-primary: #475569; 
+  --color-bg-soft: #f1f5f9; 
+}
+.dark [data-theme-color="slate"] { 
+  --color-bg-soft: rgba(71, 85, 105, 0.15); 
+}
+
+[data-theme-color="zinc"] { 
+  --color-primary: #52525b; 
+  --color-bg-soft: #f4f4f5; 
+}
+.dark [data-theme-color="zinc"] { 
+  --color-bg-soft: rgba(82, 82, 91, 0.15); 
+}
+
+[data-theme-color="teal-dark"] { 
+  --color-primary: #115e59; 
+  --color-bg-soft: #ccfbf1; 
+}
+.dark [data-theme-color="teal-dark"] { 
+  --color-bg-soft: rgba(17, 94, 89, 0.25); 
+}
+
+[data-theme-color="gold"] { 
+  --color-primary: #ca8a04; 
+  --color-bg-soft: #fef9c3; 
+}
+.dark [data-theme-color="gold"] { 
+  --color-bg-soft: rgba(202, 138, 4, 0.15); 
+}
+
+[data-theme-color="crimson"] { 
+  --color-primary: #991b1b; 
+  --color-bg-soft: #fee2e2; 
+}
+.dark [data-theme-color="crimson"] { 
+  --color-bg-soft: rgba(153, 27, 27, 0.25); 
+}
+
+/* كلاسات التحكم الديناميكي الشاملة */
+.dynamic-bg {
+  background-color: var(--color-primary) !important;
+}
+
+.dynamic-soft-bg {
+  background-color: var(--color-bg-soft) !important;
+}
+
+.dynamic-text {
+  color: var(--color-primary) !important;
+}
+
+.dynamic-border {
+  border-color: var(--color-primary) !important;
+}
+
 html {
   direction: rtl;
 }
@@ -11,4 +189,9 @@ body {
   min-width: 320px;
   min-height: 100vh;
   font-family: Arial, sans-serif;
+}
+/* تعميم تأثير اللون المختار على الأيقونات والعناصر الرسومية تلقائياً */
+svg.lucide, 
+.dynamic-icon {
+  color: var(--color-primary) !important;
 }
