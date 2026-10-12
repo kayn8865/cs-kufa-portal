@@ -113,7 +113,7 @@ export default function LectureDetailPage({ lectureId: propLectureId, onBack }: 
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center bg-slate-50 dark:bg-slate-950">
-        <Loader2 size={40} className="animate-spin text-indigo-600 dark:text-indigo-400" />
+        <Loader2 size={40} className="animate-spin dynamic-text" />
       </div>
     );
   }
@@ -145,7 +145,7 @@ export default function LectureDetailPage({ lectureId: propLectureId, onBack }: 
       <div className="flex flex-col gap-4">
         <button
           onClick={handleBack}
-          className="flex items-center gap-2 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors w-fit cursor-pointer bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2 rounded-xl shadow-sm dark:shadow-md"
+          className="flex items-center gap-2 text-xs font-bold dynamic-text hover:opacity-85 transition-colors w-fit cursor-pointer bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2 rounded-xl shadow-sm dark:shadow-md"
         >
           <ArrowRight size={16} />
           <span>العودة للخلف</span>
@@ -169,7 +169,7 @@ export default function LectureDetailPage({ lectureId: propLectureId, onBack }: 
               <BookOpen size={16} />
               <span className="text-sm font-medium">{subjectName}</span>
               {lecture.lecture_number && (
-                <span className="rounded-full bg-indigo-500/20 px-3 py-0.5 text-xs text-indigo-200 dark:text-indigo-300 border border-indigo-500/30">
+                <span className="rounded-full dynamic-soft-bg px-3 py-0.5 text-xs dynamic-text border border-indigo-500/30">
                   المحاضرة رقم {lecture.lecture_number}
                 </span>
               )}
@@ -200,14 +200,14 @@ export default function LectureDetailPage({ lectureId: propLectureId, onBack }: 
               alert("لا يوجد ملف PDF مرفق لهذه المحاضرة.");
             }
           }}
-          className="group flex cursor-pointer items-center justify-between rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 shadow-sm dark:shadow-lg hover:border-indigo-500/50 transition-all"
+          className="group flex cursor-pointer items-center justify-between rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 shadow-sm dark:shadow-lg hover:border-[var(--color-primary)] transition-all"
         >
           <div className="flex items-center gap-4 flex-1">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl dynamic-soft-bg dynamic-text group-hover:scale-110 transition-transform">
               <FileText size={24} />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">ملف الـ PDF</h3>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:dynamic-text transition-colors">ملف الـ PDF</h3>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">عرض أو تحميل ملزمة المحاضرة</p>
             </div>
           </div>
@@ -216,65 +216,65 @@ export default function LectureDetailPage({ lectureId: propLectureId, onBack }: 
             {fileLink && (
               <button
                 onClick={handleDownloadPdf}
-                className="flex items-center gap-1.5 rounded-xl bg-indigo-600 px-3.5 py-2 text-xs font-bold text-white hover:bg-indigo-700 transition-colors shadow-md cursor-pointer"
+                className="flex items-center gap-1.5 rounded-xl dynamic-bg px-3.5 py-2 text-xs font-bold text-white hover:opacity-90 transition-colors shadow-md cursor-pointer"
               >
                 <Download size={15} />
                 <span>تنزيل</span>
               </button>
             )}
-            <ArrowRight size={20} className="text-slate-400 dark:text-slate-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors" />
+            <ArrowRight size={20} className="text-slate-400 dark:text-slate-500 group-hover:dynamic-text transition-colors" />
           </div>
         </div>
 
         {/* 2. كارت فيديوهات الشرح */}
         <div 
           onClick={() => navigate(`/lectures/${lecture.id}/videos`)}
-          className="group flex cursor-pointer items-center justify-between rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 shadow-sm dark:shadow-lg hover:border-indigo-500/50 transition-all"
+          className="group flex cursor-pointer items-center justify-between rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 shadow-sm dark:shadow-lg hover:border-[var(--color-primary)] transition-all"
         >
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl dynamic-soft-bg dynamic-text group-hover:scale-110 transition-transform">
               <Video size={24} />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">فيديوهات الشرح</h3>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:dynamic-text transition-colors">فيديوهات الشرح</h3>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">مشاهدة فيديوهات الشرح</p>
             </div>
           </div>
-          <ArrowRight size={20} className="text-slate-400 dark:text-slate-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors" />
+          <ArrowRight size={20} className="text-slate-400 dark:text-slate-500 group-hover:dynamic-text transition-colors" />
         </div>
 
         {/* 3. كارت الأسئلة */}
         <div 
           onClick={() => navigate(`/lectures/${lecture.id}/questions`)}
-          className="group flex cursor-pointer items-center justify-between rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 shadow-sm dark:shadow-lg hover:border-amber-500/50 transition-all"
+          className="group flex cursor-pointer items-center justify-between rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 shadow-sm dark:shadow-lg hover:border-[var(--color-primary)] transition-all"
         >
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 group-hover:scale-110 transition-transform">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl dynamic-soft-bg dynamic-text group-hover:scale-110 transition-transform">
               <HelpCircle size={24} />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">الأسئلة</h3>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:dynamic-text transition-colors">الأسئلة</h3>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">أسئلة وتدريبات مع صور الحلول</p>
             </div>
           </div>
-          <ArrowRight size={20} className="text-slate-400 dark:text-slate-500 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors" />
+          <ArrowRight size={20} className="text-slate-400 dark:text-slate-500 group-hover:dynamic-text transition-colors" />
         </div>
 
         {/* 4. كارت الواجبات */}
         <div 
           onClick={() => navigate(`/lectures/${lecture.id}/assignments`)}
-          className="group flex cursor-pointer items-center justify-between rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 shadow-sm dark:shadow-lg hover:border-emerald-500/50 transition-all"
+          className="group flex cursor-pointer items-center justify-between rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 shadow-sm dark:shadow-lg hover:border-[var(--color-primary)] transition-all"
         >
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl dynamic-soft-bg dynamic-text group-hover:scale-110 transition-transform">
               <CheckSquare size={24} />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">الواجبات</h3>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:dynamic-text transition-colors">الواجبات</h3>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">التكليفات والواجبات الخاصة بالمحاضرة</p>
             </div>
           </div>
-          <ArrowRight size={20} className="text-slate-400 dark:text-slate-500 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors" />
+          <ArrowRight size={20} className="text-slate-400 dark:text-slate-500 group-hover:dynamic-text transition-colors" />
         </div>
 
       </div>
