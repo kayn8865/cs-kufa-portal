@@ -5,7 +5,6 @@ import {
   ChevronRight,
   Clock,
   Calendar,
-  MapPin,
   Activity,
   Video,
   FileText,
