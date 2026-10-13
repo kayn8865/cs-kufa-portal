@@ -54,17 +54,17 @@ export default function Login() {
 
   return (
     <div dir="rtl" className="relative flex min-h-screen items-center justify-center bg-slate-950 p-4 overflow-hidden">
-      <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-indigo-600/10 blur-3xl pointer-events-none"></div>
-      <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-violet-600/10 blur-3xl pointer-events-none"></div>
+      <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full dynamic-soft-bg blur-3xl pointer-events-none"></div>
+      <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full dynamic-soft-bg blur-3xl pointer-events-none"></div>
 
       <div className="relative w-full max-w-md rounded-3xl border border-slate-800 bg-[#111827] p-8 shadow-2xl backdrop-blur-xl">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 shadow-inner">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl dynamic-soft-bg dynamic-text border border-indigo-500/20 shadow-inner">
             <GraduationCap size={32} />
           </div>
           <h1 className="text-2xl font-bold text-white flex items-center justify-center gap-2">
             <span>مرحباً بك مجدداً</span>
-            <Sparkles size={18} className="text-indigo-400 animate-pulse" />
+            <Sparkles size={18} className="dynamic-text animate-pulse" />
           </h1>
           <p className="text-sm text-slate-400 mt-1.5">أدخل البريد الإلكتروني وكلمة المرور للمتابعة</p>
         </div>
@@ -88,7 +88,7 @@ export default function Login() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-3.5 pr-12 text-sm text-white outline-none focus:border-indigo-500 transition-colors text-right placeholder:text-slate-600"
+                className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-3.5 pr-12 text-sm text-white outline-none focus:border-[var(--color-primary)] transition-colors text-right placeholder:text-slate-600"
                 placeholder="name@example.com"
               />
             </div>
@@ -105,7 +105,7 @@ export default function Login() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-3.5 pr-12 text-sm text-white outline-none focus:border-indigo-500 transition-colors text-right placeholder:text-slate-600"
+                className="w-full rounded-2xl border border-slate-800 bg-slate-900 p-3.5 pr-12 text-sm text-white outline-none focus:border-[var(--color-primary)] transition-colors text-right placeholder:text-slate-600"
                 placeholder="••••••••"
               />
             </div>
@@ -114,7 +114,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-indigo-600 py-4 text-sm font-bold text-white shadow-lg shadow-indigo-600/25 hover:bg-indigo-700 disabled:opacity-50 transition-all cursor-pointer"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl dynamic-bg py-4 text-sm font-bold text-white shadow-lg hover:opacity-90 disabled:opacity-50 transition-all cursor-pointer"
           >
             {loading ? (
               <Loader2 size={18} className="animate-spin" />

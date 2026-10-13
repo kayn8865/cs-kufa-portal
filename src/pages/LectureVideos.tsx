@@ -101,7 +101,7 @@ export default function LectureVideosPage() {
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center bg-slate-50 dark:bg-slate-950">
-        <Loader2 size={40} className="animate-spin text-indigo-600 dark:text-indigo-400" />
+        <Loader2 size={40} className="animate-spin dynamic-text" />
       </div>
     );
   }
@@ -131,7 +131,7 @@ export default function LectureVideosPage() {
       {/* زر العودة */}
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-2 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors w-fit cursor-pointer bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2 rounded-xl shadow-sm dark:shadow-md"
+        className="flex items-center gap-2 text-xs font-bold dynamic-text hover:opacity-85 transition-colors w-fit cursor-pointer bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2 rounded-xl shadow-sm dark:shadow-md"
       >
         <ArrowRight size={16} />
         <span>العودة إلى تفاصيل المحاضرة</span>
@@ -139,11 +139,11 @@ export default function LectureVideosPage() {
 
       {/* رأس الصفحة مع أيقونة فيديو بارزة */}
       <div className="flex items-center gap-5 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 sm:p-8 shadow-sm dark:shadow-xl transition-colors duration-300">
-        <div className="flex h-18 w-18 sm:h-20 sm:w-20 shrink-0 items-center justify-center rounded-3xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 shadow-inner">
+        <div className="flex h-18 w-18 sm:h-20 sm:w-20 shrink-0 items-center justify-center rounded-3xl dynamic-soft-bg dynamic-text border border-indigo-500/20 shadow-inner">
           <Video size={40} />
         </div>
         <div>
-          <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5 uppercase tracking-wider">
+          <span className="text-xs font-bold dynamic-text flex items-center gap-1.5 uppercase tracking-wider">
             <BookOpen size={16} /> فيديوهات الشرح الخاصة بالمحاضرة
           </span>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">{lecture?.title || "فيديوهات المحاضرة"}</h1>
@@ -158,7 +158,7 @@ export default function LectureVideosPage() {
             return (
               <div 
                 key={vid.id}
-                className="group flex flex-col justify-between rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-5 shadow-sm dark:shadow-lg hover:border-indigo-500/50 transition-all"
+                className="group flex flex-col justify-between rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-5 shadow-sm dark:shadow-lg hover:border-[var(--color-primary)] transition-all"
               >
                 <div>
                   {/* عرض الصورة المصغرة الكبيرة للفيديو مع زر التشغيل */}
@@ -174,7 +174,7 @@ export default function LectureVideosPage() {
                       </div>
                     )}
                     <div className="absolute inset-0 bg-slate-950/30 flex items-center justify-center group-hover:bg-slate-950/15 transition-colors">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-indigo-600 text-white shadow-lg group-hover:scale-110 transition-transform">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-full dynamic-bg text-white shadow-lg group-hover:scale-110 transition-transform">
                         <Play size={26} className="fill-white ml-0.5" />
                       </div>
                     </div>
@@ -186,7 +186,7 @@ export default function LectureVideosPage() {
 
                 <button 
                   onClick={() => setActiveVideoPlayer(vid)}
-                  className="w-full flex items-center justify-center gap-2 rounded-2xl bg-indigo-50 dark:bg-indigo-600/20 py-3 text-xs font-bold text-indigo-600 dark:text-indigo-400 border border-indigo-500/30 hover:bg-indigo-600 hover:text-white transition-all cursor-pointer"
+                  className="w-full flex items-center justify-center gap-2 rounded-2xl dynamic-soft-bg py-3 text-xs font-bold dynamic-text border border-indigo-500/30 hover:dynamic-bg hover:text-white transition-all cursor-pointer"
                 >
                   <Play size={15} className="fill-current" />
                   <span>تشغيل الفيديو داخل المنصة</span>
@@ -197,7 +197,7 @@ export default function LectureVideosPage() {
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-16 text-center shadow-sm dark:shadow-xl">
-          <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 shadow-inner">
+          <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-3xl dynamic-soft-bg dynamic-text border border-indigo-500/20 shadow-inner">
             <Play size={36} />
           </div>
           <h3 className="text-xl font-bold text-slate-900 dark:text-white">لا توجد فيديوهات مضافة لهذه المحاضرة حالياً</h3>
@@ -238,7 +238,7 @@ export default function LectureVideosPage() {
                 href={activeVideoPlayer.youtube_url} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline"
+                className="flex items-center gap-1.5 text-xs font-bold dynamic-text hover:underline"
               >
                 <ExternalLink size={14} />
                 <span>فتح الفيديو مباشرة في يوتيوب</span>

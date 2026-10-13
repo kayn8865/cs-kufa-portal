@@ -242,13 +242,13 @@ export default function LecturesManagement() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-                محاضرات مادة: <span className="text-indigo-600 dark:text-indigo-400">{subject?.name || "..."}</span>
+                محاضرات مادة: <span className="dynamic-text">{subject?.name || "..."}</span>
               </h1>
               <p className="text-sm text-slate-500 dark:text-slate-400">انقر على أي محاضرة لعرض تفاصيلها (PDF، الفيديوهات، الأسئلة، والواجبات)</p>
             </div>
           </div>
 
-          <button onClick={openAddModal} className="flex items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-600/20 hover:bg-indigo-700">
+          <button onClick={openAddModal} className="flex items-center justify-center gap-2 rounded-2xl dynamic-bg px-6 py-3.5 text-sm font-bold text-white shadow-lg hover:opacity-90">
             <Plus size={20} />
             <span>إضافة محاضرة جديدة</span>
           </button>
@@ -256,7 +256,7 @@ export default function LecturesManagement() {
 
         {loading ? (
           <div className="flex h-64 items-center justify-center">
-            <Loader2 size={36} className="animate-spin text-indigo-600 dark:text-indigo-400" />
+            <Loader2 size={36} className="animate-spin dynamic-text" />
           </div>
         ) : error ? (
           <div className="rounded-3xl border border-red-200 bg-red-50 p-8 text-center text-red-600 dark:border-red-500/20 dark:bg-red-500/10">
@@ -274,15 +274,15 @@ export default function LecturesManagement() {
               <div 
                 key={lecture.id} 
                 onClick={() => navigate(`/admin/lectures/${lecture.id}/details`)}
-                className="group relative flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md hover:border-indigo-500/50 transition-all dark:border-slate-800 dark:bg-slate-900 cursor-pointer"
+                className="group relative flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md hover:border-[var(--color-primary)] transition-all dark:border-slate-800 dark:bg-slate-900 cursor-pointer"
               >
                 <div>
                   <div className="mb-4 flex items-center justify-between">
-                    <span className="rounded-xl bg-indigo-50 px-3 py-1.5 text-xs font-bold text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400">
+                    <span className="rounded-xl dynamic-soft-bg px-3 py-1.5 text-xs font-bold dynamic-text">
                       المحاضرة {lecture.lecture_number}
                     </span>
                     <div className="flex items-center gap-2">
-                      <button onClick={(e) => openEditModal(e, lecture)} className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-400 transition-colors" title="تعديل المحاضرة">
+                      <button onClick={(e) => openEditModal(e, lecture)} className="flex h-9 w-9 items-center justify-center rounded-xl dynamic-soft-bg dynamic-text hover:opacity-85 transition-colors" title="تعديل المحاضرة">
                         <Edit3 size={16} />
                       </button>
                       <button onClick={(e) => initiateDelete(e, lecture)} className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-500/10 dark:text-red-400 transition-colors" title="حذف المحاضرة">
@@ -291,7 +291,7 @@ export default function LecturesManagement() {
                     </div>
                   </div>
 
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-indigo-600 transition-colors">{lecture.title}</h3>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:dynamic-text transition-colors">{lecture.title}</h3>
                   <p className="text-sm text-slate-500 dark:text-slate-400 mb-4 line-clamp-2">{lecture.description || "لا يوجد وصف لهذه المحاضرة."}</p>
                 </div>
 
@@ -323,23 +323,23 @@ export default function LecturesManagement() {
               <form onSubmit={handleAddLecture} className="space-y-4">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">عنوان المحاضرة</label>
-                  <input type="text" required value={title} onChange={(e) => setTitle(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white" placeholder="مثال: مقدمة في قواعد البيانات" />
+                  <input type="text" required value={title} onChange={(e) => setTitle(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white" placeholder="مثال: مقدمة في قواعد البيانات" />
                 </div>
 
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">رقم المحاضرة</label>
-                  <input type="number" required value={lectureNumber} onChange={(e) => setLectureNumber(Number(e.target.value))} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white" />
+                  <input type="number" required value={lectureNumber} onChange={(e) => setLectureNumber(Number(e.target.value))} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white" />
                 </div>
 
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">الوصف (اختياري)</label>
-                  <textarea rows={3} value={description} onChange={(e) => setDescription(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white" placeholder="ملخص محتوى المحاضرة..." />
+                  <textarea rows={3} value={description} onChange={(e) => setDescription(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white" placeholder="ملخص محتوى المحاضرة..." />
                 </div>
 
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">اختر ملف الـ PDF من جهازك</label>
                   <div className="flex items-center gap-3">
-                    <label className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-4 hover:border-indigo-600 dark:border-slate-700 dark:bg-slate-950">
+                    <label className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-4 hover:border-[var(--color-primary)] dark:border-slate-700 dark:bg-slate-950">
                       <Upload size={20} className="text-slate-400" />
                       <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
                         {pdfFile ? pdfFile.name : "اضغط لاختيار ملف PDF"}
@@ -356,12 +356,12 @@ export default function LecturesManagement() {
 
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">رابط فيديو اليوتيوب الرئيسي (اختياري)</label>
-                  <input type="text" value={youtubeUrl} onChange={(e) => setYoutubeUrl(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white" placeholder="https://youtube.com/watch?v=..." dir="ltr" />
+                  <input type="text" value={youtubeUrl} onChange={(e) => setYoutubeUrl(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white" placeholder="https://youtube.com/watch?v=..." dir="ltr" />
                 </div>
 
                 <div className="mt-6 flex justify-end gap-3">
                   <button type="button" onClick={() => setIsAddModalOpen(false)} className="rounded-2xl border border-slate-200 px-6 py-3 text-sm font-bold text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800">إلغاء</button>
-                  <button type="submit" disabled={submitting || uploadingFile} className="flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 disabled:opacity-50">
+                  <button type="submit" disabled={submitting || uploadingFile} className="flex items-center gap-2 rounded-2xl dynamic-bg px-6 py-3 text-sm font-bold text-white hover:opacity-90 disabled:opacity-50">
                     {(submitting || uploadingFile) && <Loader2 size={18} className="animate-spin" />}
                     <span>{uploadingFile ? "جاري رفع الملف..." : "إضافة المحاضرة"}</span>
                   </button>
@@ -382,23 +382,23 @@ export default function LecturesManagement() {
               <form onSubmit={handleEditLecture} className="space-y-4">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">عنوان المحاضرة</label>
-                  <input type="text" required value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white" />
+                  <input type="text" required value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white" />
                 </div>
 
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">رقم المحاضرة</label>
-                  <input type="number" required value={editLectureNumber} onChange={(e) => setEditLectureNumber(Number(e.target.value))} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white" />
+                  <input type="number" required value={editLectureNumber} onChange={(e) => setEditLectureNumber(Number(e.target.value))} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white" />
                 </div>
 
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">الوصف</label>
-                  <textarea rows={3} value={editDescription} onChange={(e) => setEditDescription(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white" />
+                  <textarea rows={3} value={editDescription} onChange={(e) => setEditDescription(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white" />
                 </div>
 
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">تحديث ملف الـ PDF (اختياري)</label>
                   <div className="flex items-center gap-3">
-                    <label className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-4 hover:border-indigo-600 dark:border-slate-700 dark:bg-slate-950">
+                    <label className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-4 hover:border-[var(--color-primary)] dark:border-slate-700 dark:bg-slate-950">
                       <Upload size={20} className="text-slate-400" />
                       <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
                         {editPdfFile ? editPdfFile.name : "اختر ملف PDF جديد (اختياري)"}
@@ -415,12 +415,12 @@ export default function LecturesManagement() {
 
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">رابط فيديو اليوتيوب</label>
-                  <input type="text" value={editYoutubeUrl} onChange={(e) => setEditYoutubeUrl(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white" dir="ltr" />
+                  <input type="text" value={editYoutubeUrl} onChange={(e) => setEditYoutubeUrl(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white" dir="ltr" />
                 </div>
 
                 <div className="mt-6 flex justify-end gap-3">
                   <button type="button" onClick={() => setIsEditModalOpen(false)} className="rounded-2xl border border-slate-200 px-6 py-3 text-sm font-bold text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800">إلغاء</button>
-                  <button type="submit" disabled={submitting || uploadingFile} className="flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 disabled:opacity-50">
+                  <button type="submit" disabled={submitting || uploadingFile} className="flex items-center gap-2 rounded-2xl dynamic-bg px-6 py-3 text-sm font-bold text-white hover:opacity-90 disabled:opacity-50">
                     {(submitting || uploadingFile) && <Loader2 size={18} className="animate-spin" />}
                     <span>{uploadingFile ? "جاري رفع الملف..." : "حفظ التعديلات"}</span>
                   </button>
@@ -460,7 +460,7 @@ export default function LecturesManagement() {
                 <AlertCircle size={28} />
               </div>
               <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">قسم الحذف المؤكد</h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">إذا متأكد، احلف بالله واكتب كلمة <span className="font-bold text-indigo-600 dark:text-indigo-400">والله</span> في الحقل أدناه:</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">إذا متأكد، احلف بالله واكتب كلمة <span className="font-bold dynamic-text">والله</span> في الحقل أدناه:</p>
 
               <input
                 type="text"
@@ -470,7 +470,7 @@ export default function LecturesManagement() {
                   setSwearError("");
                 }}
                 placeholder="اكتب: والله"
-                className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-center text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white mb-2"
+                className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-center text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white mb-2"
               />
 
               {swearError && (
@@ -481,7 +481,7 @@ export default function LecturesManagement() {
                 <button onClick={() => setDeleteStep(null)} className="flex-1 rounded-2xl border border-slate-200 py-3 text-sm font-bold text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800">
                   إلغاء
                 </button>
-                <button onClick={handleFinalDeleteAction} className="flex-1 rounded-2xl bg-indigo-600 py-3 text-sm font-bold text-white hover:bg-indigo-700 shadow-lg shadow-red-600/20">
+                <button onClick={handleFinalDeleteAction} className="flex-1 rounded-2xl dynamic-bg py-3 text-sm font-bold text-white hover:opacity-90 shadow-lg">
                   تم / تأكيد
                 </button>
               </div>

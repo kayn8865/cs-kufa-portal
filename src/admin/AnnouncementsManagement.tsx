@@ -67,7 +67,7 @@ export default function AnnouncementsManagement() {
 
       if (annError) throw annError;
 
-      // 2. جلب الامتحانات من جدول exams ودمجها مع القائمة لتعرض في عمود تبليغات الامتحانات
+      // 2. جلب الامتحانات من جدول exams ودمجها مع القائمة لتظهر في عمود تبليغات الامتحانات
       const { data: examsData, error: examsError } = await supabase
         .from("exams")
         .select("*, subjects(name)")
@@ -298,7 +298,6 @@ export default function AnnouncementsManagement() {
     return supabase.storage.from("lecture-pdfs").getPublicUrl(path).data.publicUrl;
   };
 
-  // دالة مساعدة لترتيب وعرض كارد التبليغ/الإعلان
   const renderAnnouncementCard = (
     item: Announcement,
     getImageUrl: (path: string | null) => string,
@@ -313,7 +312,7 @@ export default function AnnouncementsManagement() {
         <div className="flex items-start justify-between gap-2">
           <h4 className="font-bold text-slate-900 dark:text-white text-sm">{item.title}</h4>
           <div className="flex items-center gap-1 shrink-0">
-            <button onClick={() => onEdit(item)} className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20 transition-colors cursor-pointer" title="تعديل">
+            <button onClick={() => onEdit(item)} className="flex h-7 w-7 items-center justify-center rounded-lg dynamic-soft-bg dynamic-text hover:opacity-85 transition-colors cursor-pointer" title="تعديل">
               <Edit3 size={13} />
             </button>
             <button onClick={() => onDelete(item)} className="flex h-7 w-7 items-center justify-center rounded-lg bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500/20 transition-colors cursor-pointer" title="حذف">
@@ -378,7 +377,7 @@ export default function AnnouncementsManagement() {
             </div>
           </div>
 
-          <button onClick={() => setIsAddModalOpen(true)} className="flex items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-600/20 hover:bg-indigo-700 cursor-pointer">
+          <button onClick={() => setIsAddModalOpen(true)} className="flex items-center justify-center gap-2 rounded-2xl dynamic-bg px-6 py-3.5 text-sm font-bold text-white shadow-lg hover:opacity-95 cursor-pointer">
             <Plus size={20} />
             <span>نشر تبليغ جديد</span>
           </button>
@@ -386,7 +385,7 @@ export default function AnnouncementsManagement() {
 
         {loading ? (
           <div className="flex h-64 items-center justify-center">
-            <Loader2 size={36} className="animate-spin text-indigo-600 dark:text-indigo-400" />
+            <Loader2 size={36} className="animate-spin dynamic-text" />
           </div>
         ) : error ? (
           <div className="rounded-3xl border border-red-500/20 bg-red-500/10 p-8 text-center text-red-600 dark:text-red-400">
@@ -398,7 +397,7 @@ export default function AnnouncementsManagement() {
             
             <div className="flex flex-col rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-4 shadow-sm dark:shadow-lg">
               <div className="flex items-center gap-2.5 pb-4 mb-4 border-b border-slate-200 dark:border-slate-800">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl dynamic-soft-bg dynamic-text">
                   <Megaphone size={18} />
                 </div>
                 <div>
@@ -479,6 +478,7 @@ export default function AnnouncementsManagement() {
           </div>
         )}
 
+        {/* Modal إضافة إعلان */}
         {isAddModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
             <div className="w-full max-w-lg rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
@@ -493,7 +493,7 @@ export default function AnnouncementsManagement() {
                   <select 
                     value={type} 
                     onChange={(e: any) => setType(e.target.value)}
-                    className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-indigo-500"
+                    className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)]"
                   >
                     <option value="announcement">📢 إعلان عام</option>
                     <option value="exam">📝 تبليغ امتحان (يُفعل العد التنازلي بالرئيسية)</option>
@@ -511,7 +511,7 @@ export default function AnnouncementsManagement() {
                     required 
                     value={title} 
                     onChange={(e) => setTitle(e.target.value)} 
-                    className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-indigo-500" 
+                    className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)]" 
                     placeholder="اكتب العنوان هنا..." 
                   />
                 </div>
@@ -525,7 +525,7 @@ export default function AnnouncementsManagement() {
                         required 
                         value={examDate} 
                         onChange={(e) => setExamDate(e.target.value)} 
-                        className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3 text-slate-900 dark:text-white outline-none focus:border-indigo-500 text-xs" 
+                        className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3 text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)] text-xs" 
                       />
                     </div>
                     <div>
@@ -535,7 +535,7 @@ export default function AnnouncementsManagement() {
                         required 
                         value={examTime} 
                         onChange={(e) => setExamTime(e.target.value)} 
-                        className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3 text-slate-900 dark:text-white outline-none focus:border-indigo-500 text-xs" 
+                        className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3 text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)] text-xs" 
                       />
                     </div>
                   </div>
@@ -549,7 +549,7 @@ export default function AnnouncementsManagement() {
                       required 
                       value={dueDate} 
                       onChange={(e) => setDueDate(e.target.value)} 
-                      className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-indigo-500 text-xs" 
+                      className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)] text-xs" 
                     />
                   </div>
                 )}
@@ -562,7 +562,7 @@ export default function AnnouncementsManagement() {
                     rows={3} 
                     value={description} 
                     onChange={(e) => setDescription(e.target.value)} 
-                    className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-indigo-500" 
+                    className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)]" 
                     placeholder={type === "exam" ? "اسم القاعة أو الملاحظات..." : "محتوى التبليغ أو التعليمات..."} 
                   />
                 </div>
@@ -570,8 +570,8 @@ export default function AnnouncementsManagement() {
                 {type !== "exam" && (
                   <div>
                     <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">رفع صورة (اختياري)</label>
-                    <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-4 hover:border-indigo-500">
-                      <ImageIcon size={20} className="text-indigo-600 dark:text-indigo-400" />
+                    <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-4 hover:border-[var(--color-primary)]">
+                      <ImageIcon size={20} className="dynamic-text" />
                       <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{imageFile ? imageFile.name : "اختر صورة للإعلان"}</span>
                       <input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files?.[0] || null)} className="hidden" />
                     </label>
@@ -580,7 +580,7 @@ export default function AnnouncementsManagement() {
 
                 <div className="mt-6 flex justify-end gap-3">
                   <button type="button" onClick={() => setIsAddModalOpen(false)} className="rounded-2xl border border-slate-200 dark:border-slate-800 px-6 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">إلغاء</button>
-                  <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 disabled:opacity-50 cursor-pointer">
+                  <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-2xl dynamic-bg px-6 py-3 text-sm font-bold text-white hover:opacity-95 disabled:opacity-50 cursor-pointer">
                     {submitting && <Loader2 size={18} className="animate-spin" />}
                     <span>{uploadingFile ? "جاري الرفع..." : "نشر التبليغ"}</span>
                   </button>
@@ -590,6 +590,7 @@ export default function AnnouncementsManagement() {
           </div>
         )}
 
+        {/* Modal تعديل إعلان */}
         {isEditModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
             <div className="w-full max-w-lg rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
@@ -604,7 +605,7 @@ export default function AnnouncementsManagement() {
                   <select 
                     value={editType} 
                     onChange={(e: any) => setEditType(e.target.value)}
-                    className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-indigo-500"
+                    className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)]"
                   >
                     <option value="announcement">📢 إعلان عام</option>
                     <option value="exam">📝 تبليغ امتحان</option>
@@ -620,7 +621,7 @@ export default function AnnouncementsManagement() {
                     required 
                     value={editTitle} 
                     onChange={(e) => setEditTitle(e.target.value)} 
-                    className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-indigo-500" 
+                    className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)]" 
                   />
                 </div>
 
@@ -633,7 +634,7 @@ export default function AnnouncementsManagement() {
                         required 
                         value={editExamDate} 
                         onChange={(e) => setEditExamDate(e.target.value)} 
-                        className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3 text-slate-900 dark:text-white outline-none focus:border-indigo-500 text-xs" 
+                        className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3 text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)] text-xs" 
                       />
                     </div>
                     <div>
@@ -643,7 +644,7 @@ export default function AnnouncementsManagement() {
                         required 
                         value={editExamTime} 
                         onChange={(e) => setEditExamTime(e.target.value)} 
-                        className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3 text-slate-900 dark:text-white outline-none focus:border-indigo-500 text-xs" 
+                        className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3 text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)] text-xs" 
                       />
                     </div>
                   </div>
@@ -657,7 +658,7 @@ export default function AnnouncementsManagement() {
                       required 
                       value={editDueDate} 
                       onChange={(e) => setEditDueDate(e.target.value)} 
-                      className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-indigo-500 text-xs" 
+                      className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)] text-xs" 
                     />
                   </div>
                 )}
@@ -668,16 +669,16 @@ export default function AnnouncementsManagement() {
                     rows={3} 
                     value={editDescription} 
                     onChange={(e) => setEditDescription(e.target.value)} 
-                    className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-indigo-500" 
+                    className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)]" 
                   />
                 </div>
 
                 {editType !== "exam" && (
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">تغيير الصورة (اختياري)</label>
-                    <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-4 hover:border-indigo-500">
-                      <ImageIcon size={20} className="text-indigo-600 dark:text-indigo-400" />
-                      <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{editImageFile ? editImageFile.name : "اختر صورة جديدة أو اتركه كما هو"}</span>
+                    <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">تحديث الصورة (اختياري)</label>
+                    <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-4 hover:border-[var(--color-primary)]">
+                      <ImageIcon size={20} className="dynamic-text" />
+                      <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{editImageFile ? editImageFile.name : "اختر صورة جديدة للإعلان"}</span>
                       <input type="file" accept="image/*" onChange={(e) => setEditImageFile(e.target.files?.[0] || null)} className="hidden" />
                     </label>
                   </div>
@@ -685,7 +686,7 @@ export default function AnnouncementsManagement() {
 
                 <div className="mt-6 flex justify-end gap-3">
                   <button type="button" onClick={() => setIsEditModalOpen(false)} className="rounded-2xl border border-slate-200 dark:border-slate-800 px-6 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">إلغاء</button>
-                  <button type="submit" disabled={editingSubmitting} className="flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 disabled:opacity-50 cursor-pointer">
+                  <button type="submit" disabled={editingSubmitting} className="flex items-center gap-2 rounded-2xl dynamic-bg px-6 py-3 text-sm font-bold text-white hover:opacity-95 disabled:opacity-50 cursor-pointer">
                     {editingSubmitting && <Loader2 size={18} className="animate-spin" />}
                     <span>حفظ التعديلات</span>
                   </button>
@@ -695,62 +696,28 @@ export default function AnnouncementsManagement() {
           </div>
         )}
 
+        {/* Modal معاينة الصورة بحجم كبير */}
         {previewImage && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 p-4 backdrop-blur-md" onClick={() => setPreviewImage(null)}>
-            <div className="relative max-w-4xl max-h-[90vh]">
-              <button onClick={() => setPreviewImage(null)} className="absolute -top-12 right-0 rounded-xl bg-slate-800 p-2 text-white hover:bg-slate-700 cursor-pointer">
-                <X size={24} />
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-md" onClick={() => setPreviewImage(null)}>
+            <div className="relative max-w-4xl max-h-[90vh] overflow-hidden rounded-3xl bg-slate-900 p-2 border border-slate-800 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+              <button onClick={() => setPreviewImage(null)} className="absolute top-4 left-4 z-10 flex h-10 w-10 items-center justify-center rounded-2xl bg-black/60 text-white hover:bg-black/80 transition-colors">
+                <X size={22} />
               </button>
-              <img src={previewImage} alt="معاينة تكبير" className="max-h-[85vh] max-w-full rounded-2xl object-contain border border-slate-800 shadow-2xl" />
+              <img src={previewImage} alt="معيانية مكبرة" className="max-h-[85vh] w-auto object-contain rounded-2xl" />
             </div>
           </div>
         )}
 
-        {deleteStep === "swear" && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
-            <div className="w-full max-w-md rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 shadow-2xl text-center">
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
-                <AlertCircle size={28} />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">قسم الحذف المؤكد</h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">إذا متأكد من حذف هذا التبليغ، احلف بالله واكتب كلمة <span className="font-bold text-indigo-600 dark:text-indigo-400">والله</span> في الحقل أدناه:</p>
-
-              <input
-                type="text"
-                value={swearInput}
-                onChange={(e) => {
-                  setSwearInput(e.target.value);
-                  setSwearError("");
-                }}
-                placeholder="اكتب: والله"
-                className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-center text-slate-900 dark:text-white outline-none focus:border-indigo-500 mb-2"
-              />
-
-              {swearError && (
-                <p className="text-xs font-bold text-red-600 dark:text-red-400 mb-4 animate-bounce">{swearError}</p>
-              )}
-
-              <div className="flex gap-3 mt-4">
-                <button onClick={() => setDeleteStep(null)} className="flex-1 rounded-2xl border border-slate-200 dark:border-slate-800 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
-                  إلغاء
-                </button>
-                <button onClick={handleFinalDeleteAction} className="flex-1 rounded-2xl bg-indigo-600 py-3 text-sm font-bold text-white hover:bg-indigo-700 shadow-lg shadow-indigo-600/20 cursor-pointer">
-                  تم / تأكيد
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
+        {/* نافذة التأكيد الأولى بالحذف (لا / نعم) */}
         {deleteStep === "confirm" && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
             <div className="w-full max-w-md rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 shadow-2xl text-center">
               <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-red-500/10 text-red-600 dark:text-red-400">
                 <AlertCircle size={28} />
               </div>
               <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">تأكيد الحذف</h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">هل أنت متأكد من حذف هذا التبليغ؟</p>
-
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">أنت متأكد تريد حذف العنصر "{itemToDelete?.title}"؟</p>
+              
               <div className="flex gap-3">
                 <button onClick={() => handleFirstConfirm(false)} className="flex-1 rounded-2xl border border-slate-200 dark:border-slate-800 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
                   لا
@@ -762,6 +729,44 @@ export default function AnnouncementsManagement() {
             </div>
           </div>
         )}
+
+        {/* نافذة الحلفان الثانية للتاكيد الصارم */}
+        {deleteStep === "swear" && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
+            <div className="w-full max-w-md rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 shadow-2xl text-center">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                <AlertCircle size={28} />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">قسم الحذف المؤكد</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">إذا متأكد، احلف بالله واكتب كلمة <span className="font-bold dynamic-text">والله</span> في الحقل أدناه:</p>
+
+              <input
+                type="text"
+                value={swearInput}
+                onChange={(e) => {
+                  setSwearInput(e.target.value);
+                  setSwearError("");
+                }}
+                placeholder="اكتب: والله"
+                className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-center text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)] mb-2"
+              />
+
+              {swearError && (
+                <p className="text-xs font-bold text-red-600 dark:text-red-400 mb-4 animate-bounce">{swearError}</p>
+              )}
+
+              <div className="flex gap-3 mt-4">
+                <button onClick={() => setDeleteStep(null)} className="flex-1 rounded-2xl border border-slate-200 dark:border-slate-800 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+                  إلغاء
+                </button>
+                <button onClick={handleFinalDeleteAction} className="flex-1 rounded-2xl dynamic-bg py-3 text-sm font-bold text-white hover:opacity-95 shadow-lg cursor-pointer">
+                  تم / تأكيد
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );

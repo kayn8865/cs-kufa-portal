@@ -224,13 +224,13 @@ export default function LectureVideosManagement() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-                إدارة فيديوهات محاضرة: <span className="text-indigo-600 dark:text-indigo-400">{lecture?.title || "..."}</span>
+                إدارة فيديوهات محاضرة: <span className="dynamic-text">{lecture?.title || "..."}</span>
               </h1>
               <p className="text-sm text-slate-500 dark:text-slate-400">إضافة وتعديل وتشغيل فيديوهات الشرح بمشغل سينمائي متكامل</p>
             </div>
           </div>
 
-          <button onClick={openAddModal} className="flex items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-600/20 hover:bg-indigo-700">
+          <button onClick={openAddModal} className="flex items-center justify-center gap-2 rounded-2xl dynamic-bg px-6 py-3.5 text-sm font-bold text-white shadow-lg hover:opacity-90">
             <Plus size={20} />
             <span>إضافة فيديو جديد</span>
           </button>
@@ -238,7 +238,7 @@ export default function LectureVideosManagement() {
 
         {loading ? (
           <div className="flex h-64 items-center justify-center">
-            <Loader2 size={36} className="animate-spin text-indigo-600 dark:text-indigo-400" />
+            <Loader2 size={36} className="animate-spin dynamic-text" />
           </div>
         ) : error ? (
           <div className="rounded-3xl border border-red-500/20 bg-red-500/10 p-8 text-center text-red-600 dark:text-red-400">
@@ -255,7 +255,7 @@ export default function LectureVideosManagement() {
             {videos.map((vid) => {
               const thumbnailUrl = getYouTubeThumbnail(vid.youtube_url);
               return (
-                <div key={vid.id} className="group flex flex-col justify-between rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-5 shadow-sm dark:shadow-lg hover:border-indigo-500/50 transition-all">
+                <div key={vid.id} className="group flex flex-col justify-between rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-5 shadow-sm dark:shadow-lg hover:border-[var(--color-primary)] transition-all">
                   <div>
                     {/* عرض الصورة المصغرة الكبيرة للفيديو مع زر التشغيل */}
                     <div 
@@ -270,7 +270,7 @@ export default function LectureVideosManagement() {
                         </div>
                       )}
                       <div className="absolute inset-0 bg-slate-950/30 flex items-center justify-center group-hover:bg-slate-950/15 transition-colors">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-600 text-white shadow-lg group-hover:scale-110 transition-transform">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full dynamic-bg text-white shadow-lg group-hover:scale-110 transition-transform">
                           <Play size={22} className="fill-white ml-0.5" />
                         </div>
                       </div>
@@ -279,7 +279,7 @@ export default function LectureVideosManagement() {
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="text-lg font-bold text-slate-900 dark:text-white line-clamp-1">{vid.title}</h3>
                       <div className="flex items-center gap-1.5">
-                        <button onClick={() => openEditModal(vid)} className="flex h-8 w-8 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20 transition-colors" title="تعديل الفيديو">
+                        <button onClick={() => openEditModal(vid)} className="flex h-8 w-8 items-center justify-center rounded-xl dynamic-soft-bg dynamic-text hover:opacity-85 transition-colors" title="تعديل الفيديو">
                           <Edit3 size={15} />
                         </button>
                         <button onClick={() => initiateDelete(vid)} className="flex h-8 w-8 items-center justify-center rounded-xl bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500/20 transition-colors" title="حذف الفيديو">
@@ -293,7 +293,7 @@ export default function LectureVideosManagement() {
 
                   <button 
                     onClick={() => setActiveVideoPlayer(vid)}
-                    className="w-full flex items-center justify-center gap-2 rounded-2xl bg-indigo-50 dark:bg-indigo-600/20 py-2.5 text-xs font-bold text-indigo-600 dark:text-indigo-400 border border-indigo-500/30 hover:bg-indigo-600 hover:text-white transition-all cursor-pointer"
+                    className="w-full flex items-center justify-center gap-2 rounded-2xl dynamic-soft-bg py-2.5 text-xs font-bold dynamic-text border border-indigo-500/30 hover:dynamic-bg hover:text-white transition-all cursor-pointer"
                   >
                     <Play size={14} className="fill-current" />
                     <span>تشغيل الفيديو داخل المنصة</span>
@@ -334,7 +334,7 @@ export default function LectureVideosManagement() {
                   href={activeVideoPlayer.youtube_url} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline"
+                  className="text-xs font-bold dynamic-text hover:underline"
                 >
                   فتح الفيديو مباشرة في يوتيوب ↗
                 </a>
@@ -360,22 +360,22 @@ export default function LectureVideosManagement() {
               <form onSubmit={handleAddVideo} className="space-y-4">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">عنوان الفيديو</label>
-                  <input type="text" required value={title} onChange={(e) => setTitle(e.target.value)} className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-indigo-500" placeholder="مثال: شرح العمليات الأساسية" />
+                  <input type="text" required value={title} onChange={(e) => setTitle(e.target.value)} className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)]" placeholder="مثال: شرح العمليات الأساسية" />
                 </div>
 
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">وصف الفيديو (اختياري)</label>
-                  <textarea rows={3} value={description} onChange={(e) => setDescription(e.target.value)} className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-indigo-500" placeholder="تفاصيل إضافية حول الفيديو..." />
+                  <textarea rows={3} value={description} onChange={(e) => setDescription(e.target.value)} className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)]" placeholder="تفاصيل إضافية حول الفيديو..." />
                 </div>
 
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">رابط يوتيوب (Youtube URL)</label>
-                  <input type="url" required value={youtubeUrl} onChange={(e) => setYoutubeUrl(e.target.value)} className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-indigo-500" placeholder="https://youtube.com/watch?v=..." dir="ltr" />
+                  <input type="url" required value={youtubeUrl} onChange={(e) => setYoutubeUrl(e.target.value)} className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)]" placeholder="https://youtube.com/watch?v=..." dir="ltr" />
                 </div>
 
                 <div className="mt-6 flex justify-end gap-3">
                   <button type="button" onClick={() => setIsAddModalOpen(false)} className="rounded-2xl border border-slate-200 dark:border-slate-800 px-6 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">إلغاء</button>
-                  <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 disabled:opacity-50 cursor-pointer">
+                  <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-2xl dynamic-bg px-6 py-3 text-sm font-bold text-white hover:opacity-90 disabled:opacity-50 cursor-pointer">
                     {submitting && <Loader2 size={18} className="animate-spin" />}
                     <span>إضافة الفيديو</span>
                   </button>
@@ -396,22 +396,22 @@ export default function LectureVideosManagement() {
               <form onSubmit={handleEditVideo} className="space-y-4">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">عنوان الفيديو</label>
-                  <input type="text" required value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-indigo-500" />
+                  <input type="text" required value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)]" />
                 </div>
 
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">وصف الفيديو</label>
-                  <textarea rows={3} value={editDescription} onChange={(e) => setEditDescription(e.target.value)} className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-indigo-500" />
+                  <textarea rows={3} value={editDescription} onChange={(e) => setEditDescription(e.target.value)} className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)]" />
                 </div>
 
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">رابط يوتيوب</label>
-                  <input type="url" required value={editYoutubeUrl} onChange={(e) => setEditYoutubeUrl(e.target.value)} className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-indigo-500" dir="ltr" />
+                  <input type="url" required value={editYoutubeUrl} onChange={(e) => setEditYoutubeUrl(e.target.value)} className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)]" dir="ltr" />
                 </div>
 
                 <div className="mt-6 flex justify-end gap-3">
                   <button type="button" onClick={() => setIsEditModalOpen(false)} className="rounded-2xl border border-slate-200 dark:border-slate-800 px-6 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">إلغاء</button>
-                  <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 disabled:opacity-50 cursor-pointer">
+                  <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-2xl dynamic-bg px-6 py-3 text-sm font-bold text-white hover:opacity-90 disabled:opacity-50 cursor-pointer">
                     {submitting && <Loader2 size={18} className="animate-spin" />}
                     <span>حفظ التعديلات</span>
                   </button>
@@ -451,7 +451,7 @@ export default function LectureVideosManagement() {
                 <AlertCircle size={28} />
               </div>
               <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">قسم الحذف المؤكد</h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">إذا متأكد، احلف بالله واكتب كلمة <span className="font-bold text-indigo-600 dark:text-indigo-400">والله</span> في الحقل أدناه:</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">إذا متأكد، احلف بالله واكتب كلمة <span className="font-bold dynamic-text">والله</span> في الحقل أدناه:</p>
 
               <input
                 type="text"
@@ -461,7 +461,7 @@ export default function LectureVideosManagement() {
                   setSwearError("");
                 }}
                 placeholder="اكتب: والله"
-                className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-center text-slate-900 dark:text-white outline-none focus:border-indigo-500 mb-2"
+                className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-center text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)] mb-2"
               />
 
               {swearError && (
@@ -472,7 +472,7 @@ export default function LectureVideosManagement() {
                 <button onClick={() => setDeleteStep(null)} className="flex-1 rounded-2xl border border-slate-200 dark:border-slate-800 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
                   إلغاء
                 </button>
-                <button onClick={handleFinalDeleteAction} className="flex-1 rounded-2xl bg-indigo-600 py-3 text-sm font-bold text-white hover:bg-indigo-700 shadow-lg shadow-indigo-600/20 cursor-pointer">
+                <button onClick={handleFinalDeleteAction} className="flex-1 rounded-2xl dynamic-bg py-3 text-sm font-bold text-white hover:opacity-90 shadow-lg cursor-pointer">
                   تم / تأكيد
                 </button>
               </div>

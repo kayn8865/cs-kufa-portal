@@ -64,7 +64,6 @@ export default function AdminDashboard() {
       icon: BookOpen,
       count: counts.subjects,
       path: "/admin/subjects",
-      color: "from-blue-600 to-indigo-600"
     },
     {
       title: "إدارة المحاضرات",
@@ -72,7 +71,6 @@ export default function AdminDashboard() {
       icon: FileText,
       count: "محتوى",
       path: "/admin/lectures",
-      color: "from-violet-600 to-purple-600"
     },
     {
       title: "إدارة الطلاب",
@@ -80,7 +78,6 @@ export default function AdminDashboard() {
       icon: Users,
       count: counts.students,
       path: "/admin/students",
-      color: "from-emerald-600 to-teal-600"
     },
     {
       title: "إدارة التبليغات",
@@ -88,7 +85,6 @@ export default function AdminDashboard() {
       icon: Megaphone,
       count: counts.announcements,
       path: "/admin/announcements",
-      color: "from-amber-600 to-orange-600"
     },
     {
       title: "الجدول الأسبوعي",
@@ -96,7 +92,6 @@ export default function AdminDashboard() {
       icon: Calendar,
       count: counts.schedule,
       path: "/admin/schedule",
-      color: "from-pink-600 to-rose-600"
     },
     {
       title: "المحتوى الترفيهي",
@@ -104,7 +99,6 @@ export default function AdminDashboard() {
       icon: Gamepad2,
       count: counts.entertainment,
       path: "/admin/entertainment",
-      color: "from-indigo-600 to-cyan-600"
     },
     {
       title: "المحتوى المميز (السلايدر)",
@@ -112,17 +106,16 @@ export default function AdminDashboard() {
       icon: LayoutTemplate,
       count: counts.featured,
       path: "/admin/featured",
-      color: "from-fuchsia-600 to-pink-600"
     },
   ];
 
   return (
-    <div dir="rtl" className="min-h-screen bg-slate-50 p-4 sm:p-6 lg:p-8 dark:bg-slate-950">
+    <div dir="rtl" className="min-h-screen bg-slate-50 p-4 sm:p-6 lg:p-8 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-300">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
         <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
           <div className="flex items-center gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-600 text-white shadow-lg shadow-indigo-600/30">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl dynamic-bg text-white shadow-lg">
               <ShieldAlert size={28} />
             </div>
             <div>
@@ -133,7 +126,7 @@ export default function AdminDashboard() {
 
           <Link
             to="/"
-            className="flex items-center justify-center gap-2 rounded-2xl bg-slate-100 px-6 py-3.5 text-sm font-bold text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
+            className="flex items-center justify-center gap-2 rounded-2xl bg-slate-100 px-6 py-3.5 text-sm font-bold text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 transition-colors"
           >
             <Home size={18} />
             <span>العودة للبوابة الرئيسية</span>
@@ -143,7 +136,7 @@ export default function AdminDashboard() {
         {/* Content Grid */}
         {loading ? (
           <div className="flex h-64 items-center justify-center">
-            <Loader2 size={36} className="animate-spin text-indigo-600 dark:text-indigo-400" />
+            <Loader2 size={36} className="animate-spin dynamic-text" />
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -153,13 +146,13 @@ export default function AdminDashboard() {
                 <Link
                   key={idx}
                   to={card.path}
-                  className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900"
+                  className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl hover:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-900"
                 >
-                  <div className="absolute top-0 right-0 h-2 w-full bg-gradient-to-r opacity-80 group-hover:opacity-100 transition-opacity" style={{ backgroundImage: `linear-gradient(to right, var(--tw-gradient-stops))` }} />
+                  <div className="absolute top-0 right-0 h-2 w-full dynamic-bg opacity-80 group-hover:opacity-100 transition-opacity" />
                   
                   <div>
                     <div className="mb-4 flex items-center justify-between">
-                      <div className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${card.color} text-white shadow-md`}>
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl dynamic-soft-bg dynamic-text shadow-md">
                         <Icon size={24} />
                       </div>
                       <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
@@ -167,7 +160,7 @@ export default function AdminDashboard() {
                       </span>
                     </div>
 
-                    <h3 className="mb-2 text-lg font-bold text-slate-900 group-hover:text-indigo-600 dark:text-white dark:group-hover:text-indigo-400 transition-colors">
+                    <h3 className="mb-2 text-lg font-bold text-slate-900 group-hover:dynamic-text dark:text-white transition-colors">
                       {card.title}
                     </h3>
                     <p className="text-sm text-slate-500 dark:text-slate-400">
@@ -175,7 +168,7 @@ export default function AdminDashboard() {
                     </p>
                   </div>
 
-                  <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-4 text-sm font-bold text-indigo-600 dark:border-slate-800 dark:text-indigo-400">
+                  <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-4 text-sm font-bold dynamic-text dark:border-slate-800">
                     <span>إدارة القسم</span>
                     <ArrowRight size={18} className="transition-transform group-hover:-translate-x-1" />
                   </div>

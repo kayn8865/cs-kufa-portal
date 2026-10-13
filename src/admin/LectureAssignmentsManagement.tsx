@@ -244,13 +244,13 @@ export default function LectureAssignmentsManagement() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-                إدارة واجبات محاضرة: <span className="text-emerald-600 dark:text-emerald-400">{lecture?.title || "..."}</span>
+                إدارة واجبات محاضرة: <span className="dynamic-text">{lecture?.title || "..."}</span>
               </h1>
               <p className="text-sm text-slate-500 dark:text-slate-400">إضافة وتعديل وحذف الواجبات والتكليفات مع صور الحلول</p>
             </div>
           </div>
 
-          <button onClick={() => setIsAddModalOpen(true)} className="flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 cursor-pointer">
+          <button onClick={() => setIsAddModalOpen(true)} className="flex items-center justify-center gap-2 rounded-2xl dynamic-bg px-6 py-3.5 text-sm font-bold text-white shadow-lg hover:opacity-90 cursor-pointer">
             <Plus size={20} />
             <span>إضافة واجب جديد</span>
           </button>
@@ -258,7 +258,7 @@ export default function LectureAssignmentsManagement() {
 
         {loading ? (
           <div className="flex h-64 items-center justify-center">
-            <Loader2 size={36} className="animate-spin text-emerald-600 dark:text-emerald-400" />
+            <Loader2 size={36} className="animate-spin dynamic-text" />
           </div>
         ) : error ? (
           <div className="rounded-3xl border border-red-500/20 bg-red-500/10 p-8 text-center text-red-600 dark:text-red-400">
@@ -277,12 +277,12 @@ export default function LectureAssignmentsManagement() {
               const ansImg = getPublicImageUrl(a.answer_image_url);
 
               return (
-                <div key={a.id} className="flex flex-col justify-between rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-5 shadow-sm dark:shadow-lg">
+                <div key={a.id} className="flex flex-col justify-between rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-5 shadow-sm dark:shadow-lg hover:border-[var(--color-primary)] transition-all">
                   <div>
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-lg font-bold text-slate-900 dark:text-white">{a.title}</h3>
                       <div className="flex items-center gap-1.5">
-                        <button onClick={() => openEditModal(a)} className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 transition-colors cursor-pointer" title="تعديل">
+                        <button onClick={() => openEditModal(a)} className="flex h-8 w-8 items-center justify-center rounded-xl dynamic-soft-bg dynamic-text hover:opacity-85 transition-colors cursor-pointer" title="تعديل">
                           <Edit3 size={15} />
                         </button>
                         <button onClick={() => initiateDelete(a)} className="flex h-8 w-8 items-center justify-center rounded-xl bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500/20 transition-colors cursor-pointer" title="حذف">
@@ -340,13 +340,13 @@ export default function LectureAssignmentsManagement() {
               <form onSubmit={handleAddAssignment} className="space-y-4">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">عنوان الواجب أو التكليف</label>
-                  <input type="text" required value={title} onChange={(e) => setTitle(e.target.value)} className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-emerald-500" placeholder="مثال: واجب البيت البرمجي الأول" />
+                  <input type="text" required value={title} onChange={(e) => setTitle(e.target.value)} className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)]" placeholder="مثال: واجب البيت البرمجي الأول" />
                 </div>
 
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">صورة الواجب / التكليف</label>
-                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-4 hover:border-emerald-500">
-                    <ImageIcon size={20} className="text-emerald-600 dark:text-emerald-400" />
+                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-4 hover:border-[var(--color-primary)]">
+                    <ImageIcon size={20} className="dynamic-text" />
                     <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{assignmentFile ? assignmentFile.name : "اختر صورة الواجب"}</span>
                     <input type="file" accept="image/*" onChange={(e) => setAssignmentFile(e.target.files?.[0] || null)} className="hidden" />
                   </label>
@@ -354,8 +354,8 @@ export default function LectureAssignmentsManagement() {
 
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">صورة الإجابة / الحل</label>
-                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-4 hover:border-emerald-500">
-                    <ImageIcon size={20} className="text-indigo-600 dark:text-indigo-400" />
+                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-4 hover:border-[var(--color-primary)]">
+                    <ImageIcon size={20} className="dynamic-text" />
                     <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{answerFile ? answerFile.name : "اختر صورة الإجابة"}</span>
                     <input type="file" accept="image/*" onChange={(e) => setAnswerFile(e.target.files?.[0] || null)} className="hidden" />
                   </label>
@@ -363,7 +363,7 @@ export default function LectureAssignmentsManagement() {
 
                 <div className="mt-6 flex justify-end gap-3">
                   <button type="button" onClick={() => setIsAddModalOpen(false)} className="rounded-2xl border border-slate-200 dark:border-slate-800 px-6 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">إلغاء</button>
-                  <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-2xl bg-emerald-600 px-6 py-3 text-sm font-bold text-white hover:bg-emerald-700 disabled:opacity-50 cursor-pointer">
+                  <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-2xl dynamic-bg px-6 py-3 text-sm font-bold text-white hover:opacity-90 disabled:opacity-50 cursor-pointer">
                     {submitting && <Loader2 size={18} className="animate-spin" />}
                     <span>{uploadingFiles ? "جاري الرفع..." : "إضافة الواجب"}</span>
                   </button>
@@ -384,13 +384,13 @@ export default function LectureAssignmentsManagement() {
               <form onSubmit={handleEditAssignment} className="space-y-4">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">عنوان الواجب</label>
-                  <input type="text" required value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-emerald-500" />
+                  <input type="text" required value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)]" />
                 </div>
 
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">تحديث صورة الواجب (اختياري)</label>
-                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-4 hover:border-emerald-500">
-                    <ImageIcon size={20} className="text-emerald-600 dark:text-emerald-400" />
+                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-4 hover:border-[var(--color-primary)]">
+                    <ImageIcon size={20} className="dynamic-text" />
                     <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{editAssignmentFile ? editAssignmentFile.name : "اختر صورة واجب جديدة"}</span>
                     <input type="file" accept="image/*" onChange={(e) => setEditAssignmentFile(e.target.files?.[0] || null)} className="hidden" />
                   </label>
@@ -398,8 +398,8 @@ export default function LectureAssignmentsManagement() {
 
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">تحديث صورة الإجابة (اختياري)</label>
-                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-4 hover:border-emerald-500">
-                    <ImageIcon size={20} className="text-indigo-600 dark:text-indigo-400" />
+                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-4 hover:border-[var(--color-primary)]">
+                    <ImageIcon size={20} className="dynamic-text" />
                     <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{editAnswerFile ? editAnswerFile.name : "اختر صورة إجابة جديدة"}</span>
                     <input type="file" accept="image/*" onChange={(e) => setEditAnswerFile(e.target.files?.[0] || null)} className="hidden" />
                   </label>
@@ -407,7 +407,7 @@ export default function LectureAssignmentsManagement() {
 
                 <div className="mt-6 flex justify-end gap-3">
                   <button type="button" onClick={() => setIsEditModalOpen(false)} className="rounded-2xl border border-slate-200 dark:border-slate-800 px-6 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">إلغاء</button>
-                  <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-2xl bg-emerald-600 px-6 py-3 text-sm font-bold text-white hover:bg-emerald-700 disabled:opacity-50 cursor-pointer">
+                  <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-2xl dynamic-bg px-6 py-3 text-sm font-bold text-white hover:opacity-90 disabled:opacity-50 cursor-pointer">
                     {submitting && <Loader2 size={18} className="animate-spin" />}
                     <span>{uploadingFiles ? "جاري الرفع..." : "حفظ التعديلات"}</span>
                   </button>
@@ -459,7 +459,7 @@ export default function LectureAssignmentsManagement() {
                 <AlertCircle size={28} />
               </div>
               <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">قسم الحذف المؤكد</h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">إذا متأكد، احلف بالله واكتب كلمة <span className="font-bold text-emerald-600 dark:text-emerald-400">والله</span> في الحقل أدناه:</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">إذا متأكد، احلف بالله واكتب كلمة <span className="font-bold dynamic-text">والله</span> في الحقل أدناه:</p>
 
               <input
                 type="text"
@@ -469,7 +469,7 @@ export default function LectureAssignmentsManagement() {
                   setSwearError("");
                 }}
                 placeholder="اكتب: والله"
-                className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-center text-slate-900 dark:text-white outline-none focus:border-emerald-500 mb-2"
+                className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-center text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)] mb-2"
               />
 
               {swearError && (
@@ -480,7 +480,7 @@ export default function LectureAssignmentsManagement() {
                 <button onClick={() => setDeleteStep(null)} className="flex-1 rounded-2xl border border-slate-200 dark:border-slate-800 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
                   إلغاء
                 </button>
-                <button onClick={handleFinalDeleteAction} className="flex-1 rounded-2xl bg-emerald-600 py-3 text-sm font-bold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 cursor-pointer">
+                <button onClick={handleFinalDeleteAction} className="flex-1 rounded-2xl dynamic-bg py-3 text-sm font-bold text-white hover:opacity-90 shadow-lg cursor-pointer">
                   تم / تأكيد
                 </button>
               </div>

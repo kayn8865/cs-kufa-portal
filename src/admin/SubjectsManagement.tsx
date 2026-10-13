@@ -172,7 +172,7 @@ export default function SubjectsManagement() {
             </div>
           </div>
 
-          <button onClick={openAddModal} className="flex items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-600/20 hover:bg-indigo-700">
+          <button onClick={openAddModal} className="flex items-center justify-center gap-2 rounded-2xl dynamic-bg px-6 py-3.5 text-sm font-bold text-white shadow-lg hover:opacity-90">
             <Plus size={20} />
             <span>إضافة مادة جديدة</span>
           </button>
@@ -180,7 +180,7 @@ export default function SubjectsManagement() {
 
         {loading ? (
           <div className="flex h-64 items-center justify-center">
-            <Loader2 size={36} className="animate-spin text-indigo-600 dark:text-indigo-400" />
+            <Loader2 size={36} className="animate-spin dynamic-text" />
           </div>
         ) : error ? (
           <div className="rounded-3xl border border-red-200 bg-red-50 p-8 text-center text-red-600 dark:border-red-500/20 dark:bg-red-500/10">
@@ -197,11 +197,11 @@ export default function SubjectsManagement() {
             {subjects.map((subject) => (
               <div 
                 key={subject.id} 
-                className="group relative flex flex-col items-center justify-between rounded-3xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md hover:border-indigo-500/50 transition-all dark:border-slate-800 dark:bg-slate-900 text-center"
+                className="group relative flex flex-col items-center justify-between rounded-3xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md hover:border-[var(--color-primary)] transition-all dark:border-slate-800 dark:bg-slate-900 text-center"
               >
                 {/* أزرار التعديل والحذف فوق الصورة */}
                 <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
-                  <button onClick={(e) => openEditModal(e, subject)} className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-400 transition-colors" title="تعديل المادة">
+                  <button onClick={(e) => openEditModal(e, subject)} className="flex h-9 w-9 items-center justify-center rounded-xl dynamic-soft-bg dynamic-text hover:opacity-85 transition-colors" title="تعديل المادة">
                     <Edit3 size={16} />
                   </button>
                   <button onClick={(e) => initiateDelete(e, subject)} className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-500/10 dark:text-red-400 transition-colors" title="حذف المادة">
@@ -212,7 +212,7 @@ export default function SubjectsManagement() {
                 {/* أيقونة أو صورة المادة بحجم كبير وواضح - النقر عليها يأخذك لواجهة المحاضرات */}
                 <div 
                   onClick={() => navigate(`/admin/subjects/${subject.id}/lectures`)}
-                  className="my-4 flex h-32 w-32 items-center justify-center rounded-3xl bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400 shadow-inner overflow-hidden border border-slate-100 dark:border-slate-800 cursor-pointer group-hover:scale-105 transition-transform duration-300"
+                  className="my-4 flex h-32 w-32 items-center justify-center rounded-3xl dynamic-soft-bg dynamic-text shadow-inner overflow-hidden border border-slate-100 dark:border-slate-800 cursor-pointer group-hover:scale-105 transition-transform duration-300"
                   title="انقر لإدارة محاضرات المادة"
                 >
                   {subject.image_url ? (
@@ -225,7 +225,7 @@ export default function SubjectsManagement() {
                 {/* اسم المادة تحت الأيقونة - النقر عليه أيضاً يأخذك لصفحة المحاضرات */}
                 <h3 
                   onClick={() => navigate(`/admin/subjects/${subject.id}/lectures`)}
-                  className="text-xl font-bold text-slate-900 dark:text-white mt-2 mb-1 cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                  className="text-xl font-bold text-slate-900 dark:text-white mt-2 mb-1 cursor-pointer group-hover:dynamic-text transition-colors"
                 >
                   {subject.name}
                 </h3>
@@ -245,7 +245,7 @@ export default function SubjectsManagement() {
               <form onSubmit={handleAddSubject} className="space-y-4">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">اسم المادة</label>
-                  <input type="text" required value={name} onChange={(e) => setName(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white" placeholder="مثال: قواعد البيانات" />
+                  <input type="text" required value={name} onChange={(e) => setName(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white" placeholder="مثال: قواعد البيانات" />
                 </div>
 
                 <div>
@@ -254,13 +254,13 @@ export default function SubjectsManagement() {
                     <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400">
                       <ImageIcon size={20} />
                     </span>
-                    <input type="text" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 pr-12 text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white" placeholder="https://example.com/image.png" dir="ltr" />
+                    <input type="text" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 pr-12 text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white" placeholder="https://example.com/image.png" dir="ltr" />
                   </div>
                 </div>
 
                 <div className="mt-6 flex justify-end gap-3">
                   <button type="button" onClick={() => setIsAddModalOpen(false)} className="rounded-2xl border border-slate-200 px-6 py-3 text-sm font-bold text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800">إلغاء</button>
-                  <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 disabled:opacity-50">
+                  <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-2xl dynamic-bg px-6 py-3 text-sm font-bold text-white hover:opacity-90 disabled:opacity-50">
                     {submitting && <Loader2 size={18} className="animate-spin" />}
                     <span>إضافة المادة</span>
                   </button>
@@ -281,7 +281,7 @@ export default function SubjectsManagement() {
               <form onSubmit={handleEditSubject} className="space-y-4">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">اسم المادة</label>
-                  <input type="text" required value={editName} onChange={(e) => setEditName(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white" />
+                  <input type="text" required value={editName} onChange={(e) => setEditName(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white" />
                 </div>
 
                 <div>
@@ -290,13 +290,13 @@ export default function SubjectsManagement() {
                     <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400">
                       <ImageIcon size={20} />
                     </span>
-                    <input type="text" value={editImageUrl} onChange={(e) => setEditImageUrl(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 pr-12 text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white" dir="ltr" />
+                    <input type="text" value={editImageUrl} onChange={(e) => setEditImageUrl(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 pr-12 text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white" dir="ltr" />
                   </div>
                 </div>
 
                 <div className="mt-6 flex justify-end gap-3">
                   <button type="button" onClick={() => setIsEditModalOpen(false)} className="rounded-2xl border border-slate-200 px-6 py-3 text-sm font-bold text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800">إلغاء</button>
-                  <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 disabled:opacity-50">
+                  <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-2xl dynamic-bg px-6 py-3 text-sm font-bold text-white hover:opacity-90 disabled:opacity-50">
                     {submitting && <Loader2 size={18} className="animate-spin" />}
                     <span>حفظ التعديلات</span>
                   </button>
@@ -336,7 +336,7 @@ export default function SubjectsManagement() {
                 <AlertCircle size={28} />
               </div>
               <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">قسم الحذف المؤكد</h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">إذا متأكد، احلف بالله واكتب كلمة <span className="font-bold text-indigo-600 dark:text-indigo-400">والله</span> في الحقل أدناه:</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">إذا متأكد، احلف بالله واكتب كلمة <span className="font-bold dynamic-text">والله</span> في الحقل أدناه:</p>
 
               <input
                 type="text"
@@ -346,7 +346,7 @@ export default function SubjectsManagement() {
                   setSwearError("");
                 }}
                 placeholder="اكتب: والله"
-                className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-center text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white mb-2"
+                className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-center text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white mb-2"
               />
 
               {swearError && (
@@ -357,7 +357,7 @@ export default function SubjectsManagement() {
                 <button onClick={() => setDeleteStep(null)} className="flex-1 rounded-2xl border border-slate-200 py-3 text-sm font-bold text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800">
                   إلغاء
                 </button>
-                <button onClick={handleFinalDeleteAction} className="flex-1 rounded-2xl bg-indigo-600 py-3 text-sm font-bold text-white hover:bg-indigo-700 shadow-lg shadow-indigo-600/20">
+                <button onClick={handleFinalDeleteAction} className="flex-1 rounded-2xl dynamic-bg py-3 text-sm font-bold text-white hover:opacity-90 shadow-lg">
                   تم / تأكيد
                 </button>
               </div>

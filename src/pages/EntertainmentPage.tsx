@@ -74,7 +74,7 @@ export default function EntertainmentPage() {
     >
       {loading ? (
         <div className="flex h-64 flex-col items-center justify-center gap-4">
-          <Loader2 size={32} className="animate-spin text-indigo-600 dark:text-indigo-400" />
+          <Loader2 size={32} className="animate-spin dynamic-text" />
           <p className="text-slate-500 dark:text-slate-400">جاري تحميل المحتوى...</p>
         </div>
       ) : error ? (
@@ -102,7 +102,7 @@ export default function EntertainmentPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
-              className="group flex flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900"
+              className="group flex flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg hover:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-900"
             >
               <div className="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
                 {item.image_url ? (
@@ -116,19 +116,19 @@ export default function EntertainmentPage() {
                     {getIconForType(item.type)}
                   </div>
                 )}
-                <div className="absolute right-4 top-4 flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-xs font-bold text-indigo-600 shadow-sm backdrop-blur-sm dark:bg-slate-900/90 dark:text-indigo-400">
+                <div className="absolute right-4 top-4 flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-xs font-bold dynamic-text shadow-sm backdrop-blur-sm dark:bg-slate-900/90">
                   {getIconForType(item.type)}
                   <span>{item.type}</span>
                 </div>
               </div>
               <div className="flex flex-1 flex-col p-5">
-                <h3 className="mb-2 text-lg font-bold leading-tight text-slate-900 dark:text-white">
+                <h3 className="mb-2 text-lg font-bold leading-tight text-slate-900 dark:text-white group-hover:dynamic-text transition-colors">
                   {item.title}
                 </h3>
                 <p className="mb-4 flex-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                   {item.description}
                 </p>
-                <div className="flex items-center gap-2 text-sm font-semibold text-indigo-600 dark:text-indigo-400">
+                <div className="flex items-center gap-2 text-sm font-semibold dynamic-text">
                   <span>زيارة الرابط</span>
                   <ExternalLink size={16} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                 </div>

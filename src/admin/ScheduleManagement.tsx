@@ -148,14 +148,14 @@ export default function ScheduleManagement() {
             </div>
           </div>
 
-          <button onClick={openAddModal} className="flex items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-600/20 hover:bg-indigo-700 cursor-pointer">
+          <button onClick={openAddModal} className="flex items-center justify-center gap-2 rounded-2xl dynamic-bg px-6 py-3.5 text-sm font-bold text-white shadow-lg hover:opacity-90 cursor-pointer">
             <Plus size={20} />
             <span>إضافة موعد جديد</span>
           </button>
         </header>
 
         {loading ? (
-          <div className="flex h-64 items-center justify-center"><Loader2 size={36} className="animate-spin text-indigo-600 dark:text-indigo-400" /></div>
+          <div className="flex h-64 items-center justify-center"><Loader2 size={36} className="animate-spin dynamic-text" /></div>
         ) : error ? (
           <div className="rounded-3xl border border-red-200 bg-red-50 p-8 text-center text-red-600 dark:border-red-500/20 dark:bg-red-500/10"><AlertCircle size={36} className="mx-auto mb-2" /><p>{error}</p></div>
         ) : groupedSchedule.length === 0 ? (
@@ -168,7 +168,7 @@ export default function ScheduleManagement() {
             {groupedSchedule.map((group) => (
               <div key={group.value} className="flex flex-col rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900 overflow-hidden">
                 <div className="flex items-center gap-3 bg-slate-100 dark:bg-slate-800/60 px-6 py-4 border-b border-slate-200 dark:border-slate-800">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-600 font-bold text-white text-sm shadow-md shadow-indigo-600/20">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl dynamic-bg font-bold text-white text-sm shadow-md">
                     {group.label.charAt(0)}
                   </div>
                   <div>
@@ -179,12 +179,12 @@ export default function ScheduleManagement() {
 
                 <div className="p-4 space-y-3 flex-1">
                   {group.items.map((item) => (
-                    <div key={item.id} className="flex items-center justify-between rounded-2xl border border-slate-100 bg-slate-50 p-4 dark:border-slate-800/60 dark:bg-slate-950/50 hover:border-slate-200 dark:hover:border-slate-700 transition-all">
+                    <div key={item.id} className="flex items-center justify-between rounded-2xl border border-slate-100 bg-slate-50 p-4 dark:border-slate-800/60 dark:bg-slate-950/50 hover:border-[var(--color-primary)] transition-all">
                       <div className="space-y-1">
                         <h4 className="font-bold text-slate-900 dark:text-white text-sm">{item.subjects?.name || "مادة دراسية"}</h4>
                         <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
                           <span className="flex items-center gap-1">
-                            <Clock size={12} className="text-indigo-500" />
+                            <Clock size={12} className="dynamic-text" />
                             {item.start_time} {item.end_time ? `- ${item.end_time}` : ""}
                           </span>
                           {item.location && (
@@ -197,7 +197,7 @@ export default function ScheduleManagement() {
                       </div>
 
                       <div className="flex items-center gap-1.5 shrink-0">
-                        <button onClick={() => openEditModal(item)} className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-200/60 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 cursor-pointer" title="تعديل"><Edit3 size={14} /></button>
+                        <button onClick={() => openEditModal(item)} className="flex h-8 w-8 items-center justify-center rounded-xl dynamic-soft-bg dynamic-text hover:opacity-85 cursor-pointer" title="تعديل"><Edit3 size={14} /></button>
                         <button onClick={() => handleDelete(item.id)} className="flex h-8 w-8 items-center justify-center rounded-xl bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-500/10 dark:text-red-400 dark:hover:bg-red-500/20 cursor-pointer" title="حذف"><Trash2 size={14} /></button>
                       </div>
                     </div>
@@ -219,13 +219,13 @@ export default function ScheduleManagement() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">اليوم</label>
-                    <select value={dayOfWeek} onChange={(e) => setDayOfWeek(Number(e.target.value))} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white">
+                    <select value={dayOfWeek} onChange={(e) => setDayOfWeek(Number(e.target.value))} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white">
                       {daysMap.map((d) => <option key={d.value} value={d.value}>{d.label}</option>)}
                     </select>
                   </div>
                   <div>
                     <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">المادة</label>
-                    <select value={subjectId} onChange={(e) => setSubjectId(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white" required>
+                    <select value={subjectId} onChange={(e) => setSubjectId(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white" required>
                       <option value="">اختر المادة</option>
                       {subjects.map((sub) => <option key={sub.id} value={sub.id}>{sub.name}</option>)}
                     </select>
@@ -235,22 +235,22 @@ export default function ScheduleManagement() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">وقت البدء</label>
-                    <input type="time" required value={startTime} onChange={(e) => setStartTime(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white" dir="ltr" />
+                    <input type="time" required value={startTime} onChange={(e) => setStartTime(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white" dir="ltr" />
                   </div>
                   <div>
                     <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">وقت الانتهاء</label>
-                    <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white" dir="ltr" />
+                    <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white" dir="ltr" />
                   </div>
                 </div>
 
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">القاعة / المكان</label>
-                  <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white" placeholder="مثال: قاعة 3" />
+                  <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white" placeholder="مثال: قاعة 3" />
                 </div>
 
                 <div className="mt-6 flex justify-end gap-3">
                   <button type="button" onClick={() => setIsModalOpen(false)} className="rounded-2xl border border-slate-200 px-6 py-3 text-sm font-bold text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800 cursor-pointer">إلغاء</button>
-                  <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 disabled:opacity-50 cursor-pointer">
+                  <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-2xl dynamic-bg px-6 py-3 text-sm font-bold text-white hover:opacity-90 disabled:opacity-50 cursor-pointer">
                     {submitting && <Loader2 size={18} className="animate-spin" />}
                     <span>حفظ</span>
                   </button>

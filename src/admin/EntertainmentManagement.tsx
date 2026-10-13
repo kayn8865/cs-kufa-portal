@@ -132,14 +132,14 @@ export default function EntertainmentManagement() {
             </div>
           </div>
 
-          <button onClick={openAddModal} className="flex items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-600/20 hover:bg-indigo-700 transition-all cursor-pointer">
+          <button onClick={openAddModal} className="flex items-center justify-center gap-2 rounded-2xl dynamic-bg px-6 py-3.5 text-sm font-bold text-white shadow-lg hover:opacity-90 transition-all cursor-pointer">
             <Plus size={20} />
             <span>إضافة عنصر جديد</span>
           </button>
         </header>
 
         {loading ? (
-          <div className="flex h-64 items-center justify-center"><Loader2 size={36} className="animate-spin text-indigo-600 dark:text-indigo-400" /></div>
+          <div className="flex h-64 items-center justify-center"><Loader2 size={36} className="animate-spin dynamic-text" /></div>
         ) : error ? (
           <div className="rounded-3xl border border-red-200 bg-red-50 p-8 text-center text-red-600 dark:border-red-500/20 dark:bg-red-500/10"><AlertCircle size={36} className="mx-auto mb-2" /><p>{error}</p></div>
         ) : items.length === 0 ? (
@@ -151,7 +151,7 @@ export default function EntertainmentManagement() {
           /* شبكة عرض العناصر بشكل كروت مميزة تحتوي الصورة والعنوان والوصف */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {items.map((item) => (
-              <div key={item.id} className="group relative flex flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900">
+              <div key={item.id} className="group relative flex flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:shadow-xl hover:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-900">
                 {/* صورة المحتوى مع التظليل والبادج */}
                 <div className="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-950">
                   {item.image_url ? (
@@ -168,7 +168,7 @@ export default function EntertainmentManagement() {
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
                   
                   {/* شارة نوع المحتوى */}
-                  <span className="absolute top-4 right-4 flex items-center gap-1.5 rounded-xl border border-white/10 bg-slate-900/80 backdrop-blur-md px-3 py-1 text-xs font-semibold text-indigo-300 shadow-md">
+                  <span className="absolute top-4 right-4 flex items-center gap-1.5 rounded-xl border border-white/10 bg-slate-900/80 backdrop-blur-md px-3 py-1 text-xs font-semibold dynamic-text shadow-md">
                     {renderContentIcon(item.content_type)}
                     <span>{item.content_type}</span>
                   </span>
@@ -177,7 +177,7 @@ export default function EntertainmentManagement() {
                 {/* التفاصيل (العنوان والوصف تحت الصورة) */}
                 <div className="flex flex-1 flex-col justify-between p-6">
                   <div className="space-y-2">
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:dynamic-text transition-colors">
                       {item.title}
                     </h3>
                     <p className="text-xs leading-relaxed text-slate-500 dark:text-slate-400 line-clamp-3">
@@ -191,7 +191,7 @@ export default function EntertainmentManagement() {
                       href={item.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors"
+                      className="flex items-center gap-1.5 text-xs font-bold dynamic-text hover:opacity-85 transition-colors"
                     >
                       <ExternalLink size={14} />
                       <span>زيارة الرابط</span>
@@ -231,15 +231,15 @@ export default function EntertainmentManagement() {
               <form onSubmit={handleSave} className="space-y-4">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">العنوان</label>
-                  <input type="text" required value={title} onChange={(e) => setTitle(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white" />
+                  <input type="text" required value={title} onChange={(e) => setTitle(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white" />
                 </div>
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">الوصف</label>
-                  <textarea rows={3} required value={description} onChange={(e) => setDescription(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white" />
+                  <textarea rows={3} required value={description} onChange={(e) => setDescription(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white" />
                 </div>
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">نوع المحتوى (Content Type)</label>
-                  <select value={contentType} onChange={(e) => setContentType(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white">
+                  <select value={contentType} onChange={(e) => setContentType(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white">
                     <option value="Website">موقع (Website)</option>
                     <option value="Video">فيديو (Video)</option>
                     <option value="Program">برنامج (Program)</option>
@@ -248,15 +248,15 @@ export default function EntertainmentManagement() {
                 </div>
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">رابط العنصر (URL)</label>
-                  <input type="url" required value={url} onChange={(e) => setUrl(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white" dir="ltr" />
+                  <input type="url" required value={url} onChange={(e) => setUrl(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white" dir="ltr" />
                 </div>
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">رابط الصورة (Image URL)</label>
-                  <input type="url" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-indigo-600 dark:border-slate-800 dark:bg-slate-950 dark:text-white" dir="ltr" />
+                  <input type="url" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3.5 text-slate-900 outline-none focus:border-[var(--color-primary)] dark:border-slate-800 dark:bg-slate-950 dark:text-white" dir="ltr" />
                 </div>
                 <div className="mt-6 flex justify-end gap-3">
                   <button type="button" onClick={() => setIsModalOpen(false)} className="rounded-2xl border border-slate-200 px-6 py-3 text-sm font-bold text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800 cursor-pointer">إلغاء</button>
-                  <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 disabled:opacity-50 cursor-pointer">
+                  <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-2xl dynamic-bg px-6 py-3 text-sm font-bold text-white hover:opacity-90 disabled:opacity-50 cursor-pointer">
                     {submitting && <Loader2 size={18} className="animate-spin" />}
                     <span>حفظ</span>
                   </button>
