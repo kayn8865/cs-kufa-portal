@@ -117,7 +117,7 @@ export default function AnnouncementsManagement() {
 
   const sendPushNotification = async (notificationTitle: string, notificationBody: string) => {
     try {
-      // ضع الـ REST API Key الخاص بك هنا مباشرةً
+      // ضع الـ REST API Key الخاص بك هنا بين علامتي التنصيص
       const apiKey = "ضع_هنا_REST_API_KEY_الخاص_بك"; 
 
       const response = await fetch("https://onesignal.com/api/v1/notifications", {
