@@ -117,22 +117,32 @@ export default function AnnouncementsManagement() {
 
   const sendPushNotification = async (notificationTitle: string, notificationBody: string) => {
     try {
-      await fetch("https://onesignal.com/api/v1/notifications", {
+      // ضع الـ REST API Key الخاص بك هنا مباشرةً
+      const apiKey = "ضع_هنا_REST_API_KEY_الخاص_بك"; 
+
+      const response = await fetch("https://onesignal.com/api/v1/notifications", {
         method: "POST",
         headers: {
           "Content-Type": "application/json; charset=utf-8",
-          "Authorization": "cdce7558-a5ac-4dbe-b2e7-5cd86ef012f4" // استبدلها بـ REST API Key من إعدادات OneSignal
+          "Authorization": `Basic ${apiKey.trim()}`
         },
         body: JSON.stringify({
           app_id: "cdce7558-a5ac-4dbe-b2e7-5cd86ef012f4",
-          included_segments: ["Subscribed Users"],
-          headings: { ar: notificationTitle },
-          contents: { ar: notificationBody },
+          included_segments: ["Subscribed Users", "Total Subscriptions"],
+          headings: { ar: notificationTitle, en: notificationTitle },
+          contents: { ar: notificationBody, en: notificationBody },
           url: `${window.location.origin}/#/announcements`
         })
       });
+
+      const result = await response.json();
+      console.log("استجابة سيرفر OneSignal:", result);
+
+      if (result.errors) {
+        console.error("خطأ من OneSignal:", result.errors);
+      }
     } catch (err) {
-      console.error("خطأ في إرسال الإشعار:", err);
+      console.error("خطأ أثناء إرسال الإشعار:", err);
     }
   };
 
