@@ -121,7 +121,7 @@ export default function AnnouncementsManagement() {
         method: "POST",
         headers: {
           "Content-Type": "application/json; charset=utf-8",
-          "Authorization": "Basic YOUR_REST_API_KEY" // استبدلها بـ REST API Key من إعدادات OneSignal
+          "Authorization": "cdce7558-a5ac-4dbe-b2e7-5cd86ef012f4" // استبدلها بـ REST API Key من إعدادات OneSignal
         },
         body: JSON.stringify({
           app_id: "cdce7558-a5ac-4dbe-b2e7-5cd86ef012f4",
