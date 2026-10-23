@@ -3,9 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=size=device-width, initial-scale=1.0" />
     <meta name="google" content="notranslate" />
     <title>بوابة علوم الحاسوب</title>
+
+    <!-- OneSignal SDK Push Notifications -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "cdce7558-a5ac-4dbe-b2e7-5cd86ef012f4",
+        });
+      });
+    </script>
   </head>
   <body class="notranslate">
     <div id="root"></div>
