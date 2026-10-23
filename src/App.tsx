@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { HashRouter as Router, Routes, Route, Navigate, Outlet, useNavigate, useLocation, useParams } from "react-router-dom";
 import { supabase } from "./lib/supabase";
 import type { Session } from "@supabase/supabase-js";
-import { Loader2 } from "lucide-react";
+import { Loader2, ChevronLeft } from "lucide-react";
+import OneSignal from "react-onesignal";
 
 // Components
 import Header from "./components/Header";
@@ -76,7 +77,6 @@ function MainLayout() {
   useEffect(() => {
     const root = window.document.documentElement;
 
-    // 1. استعادة وضع العرض (داكن / فاتح)
     const theme = localStorage.getItem("theme");
     const darkCheck = theme === "dark" || (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches);
     
@@ -88,7 +88,6 @@ function MainLayout() {
       setIsDark(false);
     }
 
-    // 2. استعادة وتثبيت اللون المختار من الـ 20 لوناً عند كل تحديث أو تنقل
     const savedColor = localStorage.getItem("colorTheme") || "indigo";
     root.setAttribute("data-theme-color", savedColor);
 
@@ -103,7 +102,7 @@ function MainLayout() {
   }, [isDark, location]);
 
   return (
-    <div dir="rtl" className="min-h-screen bg-slate-50 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-white">
+    <div dir="rtl" className="min-h-screen bg-slate-50 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-white relative">
       <Header
         darkMode={isDark}
         onMenu={() => setMenuOpen(true)}
@@ -112,6 +111,17 @@ function MainLayout() {
       <main className="mx-auto max-w-7xl px-4 pb-10 pt-6 sm:px-6 lg:px-8">
         <Outlet />
       </main>
+
+      {!menuOpen && (
+        <button
+          onClick={() => setMenuOpen(true)}
+          className="fixed right-0 top-1/2 -translate-y-1/2 z-40 bg-slate-900/80 hover:bg-slate-900 text-white py-4 px-1.5 rounded-l-2xl shadow-2xl backdrop-blur-md transition-all duration-300 hover:scale-105 flex items-center justify-center cursor-pointer border-y border-l border-slate-700/50"
+          aria-label="فتح القائمة"
+        >
+          <ChevronLeft size={20} className="animate-pulse" />
+        </button>
+      )}
+
       <SideMenu
         open={menuOpen}
         page={getCurrentPage()}
@@ -161,10 +171,24 @@ export default function App() {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // ضمان تطبيق اللون المحفوظ فور إقلاع التطبيق حتى قبل تحميل الجلسة
   useEffect(() => {
     const savedColor = localStorage.getItem("colorTheme") || "indigo";
     window.document.documentElement.setAttribute("data-theme-color", savedColor);
+
+    // تهيئة الإشعارات باستخدام App ID الخاص بك
+    try {
+      OneSignal.init({
+        appId: "cdce7558-a5ac-4dbe-b2e7-5cd86ef012f4",
+        allowLocalhostAsSecureOrigin: true,
+        slidedown: {
+          enabled: true,
+          autoPrompt: true,
+          timeDelay: 1,
+        }
+      });
+    } catch (e) {
+      console.error("OneSignal init error:", e);
+    }
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -189,10 +213,8 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        {/* صفحة تسجيل الدخول */}
         <Route path="/login" element={<LoginPage />} />
 
-        {/* مسارات لوحة التحكم للإدارة (محمية بـ session) */}
         <Route path="/admin" element={session ? <AdminDashboard /> : <Navigate to="/login" replace />} />
         <Route path="/admin/students" element={session ? <StudentsManagement /> : <Navigate to="/login" replace />} />
         <Route path="/admin/subjects" element={session ? <SubjectsManagement /> : <Navigate to="/login" replace />} />
@@ -208,7 +230,6 @@ export default function App() {
         <Route path="/admin/entertainment" element={session ? <EntertainmentManagement /> : <Navigate to="/login" replace />} />
         <Route path="/admin/featured" element={session ? <FeaturedManagement /> : <Navigate to="/login" replace />} />
 
-        {/* مسارات بوابة الطلاب والموقع العام */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<HomePageWrapper />} />
           <Route path="/subjects" element={<SubjectsPageWrapper />} />

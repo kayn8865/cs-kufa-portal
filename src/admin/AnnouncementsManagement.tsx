@@ -59,7 +59,6 @@ export default function AnnouncementsManagement() {
       setLoading(true);
       setError(null);
 
-      // 1. جلب الإعلانات والتبليغات العادية والواجبات والإدارة من جدول announcements
       const { data: annData, error: annError } = await supabase
         .from("announcements")
         .select("*")
@@ -67,7 +66,6 @@ export default function AnnouncementsManagement() {
 
       if (annError) throw annError;
 
-      // 2. جلب الامتحانات من جدول exams ودمجها مع القائمة لتظهر في عمود تبليغات الامتحانات
       const { data: examsData, error: examsError } = await supabase
         .from("exams")
         .select("*, subjects(name)")
@@ -75,7 +73,6 @@ export default function AnnouncementsManagement() {
 
       if (examsError) throw examsError;
 
-      // تحويل بيانات الامتحانات لتتطابق مع هيكل الـ Announcement لتسهيل عرضها
       const formattedExams: Announcement[] = (examsData || []).map((ex: any) => ({
         id: ex.id,
         type: "exam",
@@ -118,6 +115,27 @@ export default function AnnouncementsManagement() {
     }
   };
 
+  const sendPushNotification = async (notificationTitle: string, notificationBody: string) => {
+    try {
+      await fetch("https://onesignal.com/api/v1/notifications", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          "Authorization": "Basic YOUR_REST_API_KEY" // استبدلها بـ REST API Key من إعدادات OneSignal
+        },
+        body: JSON.stringify({
+          app_id: "cdce7558-a5ac-4dbe-b2e7-5cd86ef012f4",
+          included_segments: ["Subscribed Users"],
+          headings: { ar: notificationTitle },
+          contents: { ar: notificationBody },
+          url: `${window.location.origin}/#/announcements`
+        })
+      });
+    } catch (err) {
+      console.error("خطأ في إرسال الإشعار:", err);
+    }
+  };
+
   const handleAddAnnouncement = async (e: FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -144,6 +162,9 @@ export default function AnnouncementsManagement() {
 
         const { error: examInsertError } = await supabase.from("exams").insert([examRecord]);
         if (examInsertError) throw examInsertError;
+
+        await sendPushNotification("📝 تبليغ امتحان جديد", title);
+
         alert("تم إضافة الامتحان بنجاح وتفعيل العد التنازلي له في الصفحة الرئيسية!");
       } else {
         let imgPath = null;
@@ -161,7 +182,15 @@ export default function AnnouncementsManagement() {
 
         const { error: insertError } = await supabase.from("announcements").insert([newRecord]);
         if (insertError) throw insertError;
-        alert("تم نشر التبليغ بنجاح!");
+
+        const badgeTitleMap: Record<string, string> = {
+          announcement: "📢 إعلان عام جديد",
+          management: "🏛️ تبليغ إداري جديد",
+          assignment: "📋 واجب جديد مطلوب"
+        };
+        await sendPushNotification(badgeTitleMap[type] || "تنبيه جديد من القسم", title);
+
+        alert("تم نشر التبليغ بنجاح وإرسال الإشعارات للهواتف!");
       }
 
       setIsAddModalOpen(false);
@@ -582,7 +611,7 @@ export default function AnnouncementsManagement() {
                   <button type="button" onClick={() => setIsAddModalOpen(false)} className="rounded-2xl border border-slate-200 dark:border-slate-800 px-6 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">إلغاء</button>
                   <button type="submit" disabled={submitting} className="flex items-center gap-2 rounded-2xl dynamic-bg px-6 py-3 text-sm font-bold text-white hover:opacity-95 disabled:opacity-50 cursor-pointer">
                     {submitting && <Loader2 size={18} className="animate-spin" />}
-                    <span>{uploadingFile ? "جاري الرفع..." : "نشر التبليغ"}</span>
+                    <span>{uploadingFile ? "جاري الرفع وإرسال الإشعارات..." : "نشر التبليغ"}</span>
                   </button>
                 </div>
               </form>
@@ -673,16 +702,14 @@ export default function AnnouncementsManagement() {
                   />
                 </div>
 
-                {editType !== "exam" && (
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">تحديث الصورة (اختياري)</label>
-                    <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-4 hover:border-[var(--color-primary)]">
-                      <ImageIcon size={20} className="dynamic-text" />
-                      <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{editImageFile ? editImageFile.name : "اختر صورة جديدة للإعلان"}</span>
-                      <input type="file" accept="image/*" onChange={(e) => setEditImageFile(e.target.files?.[0] || null)} className="hidden" />
-                    </label>
-                  </div>
-                )}
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">تغيير الصورة (اختياري)</label>
+                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-4 hover:border-[var(--color-primary)]">
+                    <ImageIcon size={20} className="dynamic-text" />
+                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{editImageFile ? editImageFile.name : "اختر صورة جديدة"}</span>
+                    <input type="file" accept="image/*" onChange={(e) => setEditImageFile(e.target.files?.[0] || null)} className="hidden" />
+                  </label>
+                </div>
 
                 <div className="mt-6 flex justify-end gap-3">
                   <button type="button" onClick={() => setIsEditModalOpen(false)} className="rounded-2xl border border-slate-200 dark:border-slate-800 px-6 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">إلغاء</button>
@@ -696,73 +723,53 @@ export default function AnnouncementsManagement() {
           </div>
         )}
 
-        {/* Modal معاينة الصورة بحجم كبير */}
-        {previewImage && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-md" onClick={() => setPreviewImage(null)}>
-            <div className="relative max-w-4xl max-h-[90vh] overflow-hidden rounded-3xl bg-slate-900 p-2 border border-slate-800 shadow-2xl" onClick={(e) => e.stopPropagation()}>
-              <button onClick={() => setPreviewImage(null)} className="absolute top-4 left-4 z-10 flex h-10 w-10 items-center justify-center rounded-2xl bg-black/60 text-white hover:bg-black/80 transition-colors">
-                <X size={22} />
-              </button>
-              <img src={previewImage} alt="معيانية مكبرة" className="max-h-[85vh] w-auto object-contain rounded-2xl" />
-            </div>
-          </div>
-        )}
-
-        {/* نافذة التأكيد الأولى بالحذف (لا / نعم) */}
-        {deleteStep === "confirm" && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
-            <div className="w-full max-w-md rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 shadow-2xl text-center">
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-red-500/10 text-red-600 dark:text-red-400">
+        {/* نافذة الحلفان الصارم عند الحذف */}
+        {deleteStep && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
+            <div className="w-full max-w-md rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 shadow-2xl text-center space-y-4">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-500/10 text-red-600 dark:text-red-400">
                 <AlertCircle size={28} />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">تأكيد الحذف</h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">أنت متأكد تريد حذف العنصر "{itemToDelete?.title}"؟</p>
-              
-              <div className="flex gap-3">
-                <button onClick={() => handleFirstConfirm(false)} className="flex-1 rounded-2xl border border-slate-200 dark:border-slate-800 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
-                  لا
-                </button>
-                <button onClick={() => handleFirstConfirm(true)} className="flex-1 rounded-2xl bg-red-600 py-3 text-sm font-bold text-white hover:bg-red-700 shadow-lg shadow-red-600/20 cursor-pointer">
-                  نعم
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
 
-        {/* نافذة الحلفان الثانية للتاكيد الصارم */}
-        {deleteStep === "swear" && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm" onClick={(e) => e.stopPropagation()}>
-            <div className="w-full max-w-md rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 shadow-2xl text-center">
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
-                <AlertCircle size={28} />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">قسم الحذف المؤكد</h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">إذا متأكد، احلف بالله واكتب كلمة <span className="font-bold dynamic-text">والله</span> في الحقل أدناه:</p>
-
-              <input
-                type="text"
-                value={swearInput}
-                onChange={(e) => {
-                  setSwearInput(e.target.value);
-                  setSwearError("");
-                }}
-                placeholder="اكتب: والله"
-                className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3.5 text-center text-slate-900 dark:text-white outline-none focus:border-[var(--color-primary)] mb-2"
-              />
-
-              {swearError && (
-                <p className="text-xs font-bold text-red-600 dark:text-red-400 mb-4 animate-bounce">{swearError}</p>
+              {deleteStep === "confirm" ? (
+                <>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">هل أنت متأكد من حذف هذا العنصر؟</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">لن يمكنك التراجع عن هذه الخطوة بعد إتمامها.</p>
+                  <div className="flex justify-center gap-3 pt-2">
+                    <button onClick={() => handleFirstConfirm(false)} className="rounded-2xl border border-slate-200 dark:border-slate-800 px-5 py-2.5 text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer">إلغاء</button>
+                    <button onClick={() => handleFirstConfirm(true)} className="rounded-2xl bg-red-600 px-5 py-2.5 text-xs font-bold text-white cursor-pointer">نعم، متأكد</button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">تحقق صارم للحذف!</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">اكتب كلمة <span className="font-bold text-red-500">"والله"</span> في الحقل أدناه لتؤكد أنك متأكد تماماً:</p>
+                  <input 
+                    type="text" 
+                    value={swearInput} 
+                    onChange={(e) => setSwearInput(e.target.value)} 
+                    placeholder="اكتب كلمة والله هنا" 
+                    className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-3 text-center text-slate-900 dark:text-white text-sm outline-none focus:border-red-500" 
+                  />
+                  {swearError && <p className="text-xs font-bold text-red-500">{swearError}</p>}
+                  <div className="flex justify-center gap-3 pt-2">
+                    <button onClick={() => setDeleteStep(null)} className="rounded-2xl border border-slate-200 dark:border-slate-800 px-5 py-2.5 text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer">تراجع</button>
+                    <button onClick={handleFinalDeleteAction} className="rounded-2xl bg-red-600 px-5 py-2.5 text-xs font-bold text-white cursor-pointer">تنفيذ الحذف</button>
+                  </div>
+                </>
               )}
+            </div>
+          </div>
+        )}
 
-              <div className="flex gap-3 mt-4">
-                <button onClick={() => setDeleteStep(null)} className="flex-1 rounded-2xl border border-slate-200 dark:border-slate-800 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
-                  إلغاء
-                </button>
-                <button onClick={handleFinalDeleteAction} className="flex-1 rounded-2xl dynamic-bg py-3 text-sm font-bold text-white hover:opacity-95 shadow-lg cursor-pointer">
-                  تم / تأكيد
-                </button>
-              </div>
+        {/* نافذة معاينة الصورة الكبيرة */}
+        {previewImage && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4" onClick={() => setPreviewImage(null)}>
+            <div className="relative max-w-4xl max-h-[90vh]">
+              <button onClick={() => setPreviewImage(null)} className="absolute -top-12 left-0 rounded-full bg-white/10 p-2 text-white hover:bg-white/20 cursor-pointer">
+                <X size={24} />
+              </button>
+              <img src={previewImage} alt="معاينة" className="max-h-[85vh] max-w-full rounded-2xl object-contain shadow-2xl" />
             </div>
           </div>
         )}
