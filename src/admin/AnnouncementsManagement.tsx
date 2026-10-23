@@ -116,35 +116,36 @@ export default function AnnouncementsManagement() {
   };
 
   const sendPushNotification = async (notificationTitle: string, notificationBody: string) => {
-    try {
-      // ضع الـ REST API Key الخاص بك هنا بين علامتي التنصيص
-      const apiKey = "cdce7558-a5ac-4dbe-b2e7-5cd86ef012f4"; 
+  try {
+    const apiKey = "os_v2_app_zxhhkwffvrg35mxhltmg54as6szixb4jqw6uxh5kksvoctqfds6jzrwb4hd3jm2bcp3o6rrdkjdhwit6caavqxj54jkjhhfj267e3eq"; 
 
-      const response = await fetch("https://onesignal.com/api/v1/notifications", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-          "Authorization": `Basic ${apiKey.trim()}`
-        },
-        body: JSON.stringify({
-          app_id: "cdce7558-a5ac-4dbe-b2e7-5cd86ef012f4",
-          included_segments: ["Subscribed Users", "Total Subscriptions"],
-          headings: { ar: notificationTitle, en: notificationTitle },
-          contents: { ar: notificationBody, en: notificationBody },
-          url: `${window.location.origin}/#/announcements`
-        })
-      });
+    const response = await fetch("https://onesignal.com/api/v1/notifications", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Authorization": `Basic ${apiKey.trim()}`
+      },
+      body: JSON.stringify({
+        app_id: "cdce7558-a5ac-4dbe-b2e7-5cd86ef012f4",
+        included_segments: ["All"], // تغييرها إلى All لاختبار وصول الإشعار للجميع
+        headings: { ar: notificationTitle, en: notificationTitle },
+        contents: { ar: notificationBody, en: notificationBody },
+        url: `${window.location.origin}/#/announcements`
+      })
+    });
 
-      const result = await response.json();
-      console.log("استجابة سيرفر OneSignal:", result);
+    const result = await response.json();
+    console.log("استجابة سيرفر OneSignal:", result);
 
-      if (result.errors) {
-        console.error("خطأ من OneSignal:", result.errors);
-      }
-    } catch (err) {
-      console.error("خطأ أثناء إرسال الإشعار:", err);
+    if (result.errors) {
+      console.error("خطأ من OneSignal:", result.errors);
+    } else {
+      console.log("تم إرسال الإشعار بنجاح، عدد المستلمين:", result.recipients);
     }
-  };
+  } catch (err) {
+    console.error("خطأ أثناء إرسال الإشعار:", err);
+  }
+};
 
   const handleAddAnnouncement = async (e: FormEvent) => {
     e.preventDefault();
