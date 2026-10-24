@@ -118,7 +118,7 @@ export default function AnnouncementsManagement() {
   const sendPushNotification = async (notificationTitle: string, notificationBody: string) => {
   try {
     // قراءة المفتاح بأمان من متغيرات البيئة
-    const apiKey = import.meta.env.VITE_ONESIGNAL_REST_API_KEY || ""; 
+    const apiKey = import.meta.env.ONESIGNAL_REST_API_KEY || ""; 
 
     if (!apiKey) {
       console.error("لم يتم العثور على REST API Key في متغيرات البيئة");
